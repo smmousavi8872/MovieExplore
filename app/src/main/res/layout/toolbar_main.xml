@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.appbar.AppBarLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:id="@+id/abAppBar"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+    android:background="@color/pureBlack"
+  android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+  <androidx.appcompat.widget.Toolbar
+    android:id="@+id/tbMainToolbar"
+    android:layout_width="match_parent"
+    android:layout_height="?attr/actionBarSize"
+    android:background="@color/pureBlack"
+    app:layout_scrollFlags="scroll|enterAlways"
+    app:popupTheme="@style/Theme.AppCompat.Light">
+
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:gravity="center"
+      android:orientation="horizontal">
+
+      <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/imgNavbarButton"
+        android:layout_width="wrap_content"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:layout_height="wrap_content"
+        android:layout_weight=".1"
+        app:srcCompat="@drawable/ic_navbar_white" />
+
+      <androidx.appcompat.widget.AppCompatSpinner
+        android:layout_width="0dp"
+        android:layout_weight=".7"
+        android:layout_height="wrap_content"/>
+
+      <View
+        android:layout_weight=".2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+  </androidx.appcompat.widget.Toolbar>
+</com.google.android.material.appbar.AppBarLayout>

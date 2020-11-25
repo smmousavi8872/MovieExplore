@@ -1,6 +1,9 @@
 package com.developer.smmmousavi.balefilm.fragments.base.di;
 
-import com.developer.smmmousavi.balefilm.fragments.base.BaseDaggerFrgment;
+import com.developer.smmmousavi.balefilm.fragments.base.BaseDaggerFragment;
+import com.developer.smmmousavi.balefilm.fragments.home.HomeFragment;
+import com.developer.smmmousavi.balefilm.fragments.home.di.HomeFragmentModule;
+import com.developer.smmmousavi.balefilm.fragments.home.di.HomeFragmentVMModule;
 
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
@@ -9,6 +12,10 @@ import dagger.android.ContributesAndroidInjector;
 public abstract class FragmentsBuilderModule {
 
     @ContributesAndroidInjector(modules = {BaseFragmentModule.class, BaseFragmentVMModule.class,})
-    abstract BaseDaggerFrgment contributeBaseDaggerFragment();
+    abstract BaseDaggerFragment contributeBaseDaggerFragment();
+
+    @ContributesAndroidInjector(modules = {HomeFragmentModule.class, HomeFragmentVMModule.class,})
+    abstract HomeFragment contributeHomeDaggerFragment();
+
 
 }

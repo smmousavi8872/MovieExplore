@@ -17,9 +17,9 @@ import dagger.android.support.DaggerFragment;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class BaseDaggerFrgment extends DaggerFragment {
+public class BaseDaggerFragment extends DaggerFragment {
 
-    public BaseDaggerFrgment() {
+    public BaseDaggerFragment() {
         // Required empty public constructor
     }
 
