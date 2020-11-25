@@ -1,4 +1,4 @@
-package com.developer.smmmousavi.balefilm.fragments.home;
+package com.developer.smmmousavi.balefilm.fragments.setting;
 
 import android.app.Application;
 
@@ -8,10 +8,10 @@ import javax.inject.Inject;
 
 import androidx.annotation.NonNull;
 
-public class HomeFragmentViewModel extends BaseViewModel {
+public class SettingFragmentViewModel extends BaseViewModel {
 
     @Inject
-    public HomeFragmentViewModel(@NonNull Application application) {
+    public SettingFragmentViewModel(@NonNull Application application) {
         super(application);
     }
 }

@@ -7,7 +7,6 @@ import android.app.Fragment;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.ContentProvider;
-import androidx.lifecycle.ViewModel;
 import com.developer.smmmousavi.balefilm.activities.base.ActivityBuildersModule_ContributeBaseDaggerCompatActivity;
 import com.developer.smmmousavi.balefilm.activities.base.ActivityBuildersModule_ContributeBaseDrawerActivity;
 import com.developer.smmmousavi.balefilm.activities.base.ActivityBuildersModule_ContributeMainActivity;
@@ -17,23 +16,20 @@ import com.developer.smmmousavi.balefilm.activities.drawer.BaseDrawerActivity;
 import com.developer.smmmousavi.balefilm.activities.main.MainActivity;
 import com.developer.smmmousavi.balefilm.activities.singlefragment.SingleFragmentActivity;
 import com.developer.smmmousavi.balefilm.application.BaseApplication;
-import com.developer.smmmousavi.balefilm.factory.viewmodel.ViewModelProviderFactory;
 import com.developer.smmmousavi.balefilm.fragments.base.BaseDaggerFragment;
-import com.developer.smmmousavi.balefilm.fragments.base.BaseDaggerFragment_MembersInjector;
-import com.developer.smmmousavi.balefilm.fragments.base.BaseFragmentViewModel;
-import com.developer.smmmousavi.balefilm.fragments.base.BaseFragmentViewModel_Factory;
 import com.developer.smmmousavi.balefilm.fragments.base.di.FragmentsBuilderModule_ContributeBaseDaggerFragment;
 import com.developer.smmmousavi.balefilm.fragments.base.di.FragmentsBuilderModule_ContributeHomeDaggerFragment;
+import com.developer.smmmousavi.balefilm.fragments.base.di.FragmentsBuilderModule_ContributeSearchFragment;
+import com.developer.smmmousavi.balefilm.fragments.base.di.FragmentsBuilderModule_ContributeSettingDaggerFragment;
 import com.developer.smmmousavi.balefilm.fragments.home.HomeFragment;
-import com.developer.smmmousavi.balefilm.fragments.home.HomeFragmentViewModel;
-import com.developer.smmmousavi.balefilm.fragments.home.HomeFragmentViewModel_Factory;
+import com.developer.smmmousavi.balefilm.fragments.search.SearchFragment;
+import com.developer.smmmousavi.balefilm.fragments.setting.SettingFragment;
 import dagger.android.AndroidInjector;
 import dagger.android.DaggerApplication_MembersInjector;
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.DispatchingAndroidInjector_Factory;
 import dagger.android.support.DaggerAppCompatActivity_MembersInjector;
 import dagger.android.support.DaggerFragment_MembersInjector;
-import dagger.internal.InstanceFactory;
 import dagger.internal.MapBuilder;
 import dagger.internal.Preconditions;
 import java.util.Collections;
@@ -46,9 +42,6 @@ public final class DaggerApplicationComponent implements ApplicationComponent {
               .BaseDaggerCompatActivitySubcomponent.Factory>
       baseDaggerCompatActivitySubcomponentFactoryProvider;
 
-  private Provider<ActivityBuildersModule_ContributeMainActivity.MainActivitySubcomponent.Factory>
-      mainActivitySubcomponentFactoryProvider;
-
   private Provider<
           ActivityBuildersModule_ContributeBaseDrawerActivity.BaseDrawerActivitySubcomponent
               .Factory>
@@ -59,6 +52,9 @@ public final class DaggerApplicationComponent implements ApplicationComponent {
               .Factory>
       singleFragmentActivitySubcomponentFactoryProvider;
 
+  private Provider<ActivityBuildersModule_ContributeMainActivity.MainActivitySubcomponent.Factory>
+      mainActivitySubcomponentFactoryProvider;
+
   private Provider<
           FragmentsBuilderModule_ContributeBaseDaggerFragment.BaseDaggerFragmentSubcomponent
               .Factory>
@@ -68,11 +64,18 @@ public final class DaggerApplicationComponent implements ApplicationComponent {
           FragmentsBuilderModule_ContributeHomeDaggerFragment.HomeFragmentSubcomponent.Factory>
       homeFragmentSubcomponentFactoryProvider;
 
-  private Provider<Application> applicationProvider;
+  private Provider<
+          FragmentsBuilderModule_ContributeSearchFragment.SearchFragmentSubcomponent.Factory>
+      searchFragmentSubcomponentFactoryProvider;
 
-  private DaggerApplicationComponent(Application applicationParam) {
+  private Provider<
+          FragmentsBuilderModule_ContributeSettingDaggerFragment.SettingFragmentSubcomponent
+              .Factory>
+      settingFragmentSubcomponentFactoryProvider;
 
-    initialize(applicationParam);
+  private DaggerApplicationComponent(Application application) {
+
+    initialize(application);
   }
 
   public static ApplicationComponent.Builder builder() {
@@ -81,17 +84,19 @@ public final class DaggerApplicationComponent implements ApplicationComponent {
 
   private Map<Class<?>, Provider<AndroidInjector.Factory<?>>>
       getMapOfClassOfAndProviderOfAndroidInjectorFactoryOf() {
-    return MapBuilder.<Class<?>, Provider<AndroidInjector.Factory<?>>>newMapBuilder(6)
+    return MapBuilder.<Class<?>, Provider<AndroidInjector.Factory<?>>>newMapBuilder(8)
         .put(
             BaseDaggerCompatActivity.class,
             (Provider) baseDaggerCompatActivitySubcomponentFactoryProvider)
-        .put(MainActivity.class, (Provider) mainActivitySubcomponentFactoryProvider)
         .put(BaseDrawerActivity.class, (Provider) baseDrawerActivitySubcomponentFactoryProvider)
         .put(
             SingleFragmentActivity.class,
             (Provider) singleFragmentActivitySubcomponentFactoryProvider)
+        .put(MainActivity.class, (Provider) mainActivitySubcomponentFactoryProvider)
         .put(BaseDaggerFragment.class, (Provider) baseDaggerFragmentSubcomponentFactoryProvider)
         .put(HomeFragment.class, (Provider) homeFragmentSubcomponentFactoryProvider)
+        .put(SearchFragment.class, (Provider) searchFragmentSubcomponentFactoryProvider)
+        .put(SettingFragment.class, (Provider) settingFragmentSubcomponentFactoryProvider)
         .build();
   }
 
@@ -128,7 +133,7 @@ public final class DaggerApplicationComponent implements ApplicationComponent {
   }
 
   @SuppressWarnings("unchecked")
-  private void initialize(final Application applicationParam) {
+  private void initialize(final Application application) {
     this.baseDaggerCompatActivitySubcomponentFactoryProvider =
         new Provider<
             ActivityBuildersModule_ContributeBaseDaggerCompatActivity
@@ -138,15 +143,6 @@ public final class DaggerApplicationComponent implements ApplicationComponent {
                   .BaseDaggerCompatActivitySubcomponent.Factory
               get() {
             return new BaseDaggerCompatActivitySubcomponentFactory();
-          }
-        };
-    this.mainActivitySubcomponentFactoryProvider =
-        new Provider<
-            ActivityBuildersModule_ContributeMainActivity.MainActivitySubcomponent.Factory>() {
-          @Override
-          public ActivityBuildersModule_ContributeMainActivity.MainActivitySubcomponent.Factory
-              get() {
-            return new MainActivitySubcomponentFactory();
           }
         };
     this.baseDrawerActivitySubcomponentFactoryProvider =
@@ -171,6 +167,15 @@ public final class DaggerApplicationComponent implements ApplicationComponent {
             return new SingleFragmentActivitySubcomponentFactory();
           }
         };
+    this.mainActivitySubcomponentFactoryProvider =
+        new Provider<
+            ActivityBuildersModule_ContributeMainActivity.MainActivitySubcomponent.Factory>() {
+          @Override
+          public ActivityBuildersModule_ContributeMainActivity.MainActivitySubcomponent.Factory
+              get() {
+            return new MainActivitySubcomponentFactory();
+          }
+        };
     this.baseDaggerFragmentSubcomponentFactoryProvider =
         new Provider<
             FragmentsBuilderModule_ContributeBaseDaggerFragment.BaseDaggerFragmentSubcomponent
@@ -193,7 +198,26 @@ public final class DaggerApplicationComponent implements ApplicationComponent {
             return new HomeFragmentSubcomponentFactory();
           }
         };
-    this.applicationProvider = InstanceFactory.create(applicationParam);
+    this.searchFragmentSubcomponentFactoryProvider =
+        new Provider<
+            FragmentsBuilderModule_ContributeSearchFragment.SearchFragmentSubcomponent.Factory>() {
+          @Override
+          public FragmentsBuilderModule_ContributeSearchFragment.SearchFragmentSubcomponent.Factory
+              get() {
+            return new SearchFragmentSubcomponentFactory();
+          }
+        };
+    this.settingFragmentSubcomponentFactoryProvider =
+        new Provider<
+            FragmentsBuilderModule_ContributeSettingDaggerFragment.SettingFragmentSubcomponent
+                .Factory>() {
+          @Override
+          public FragmentsBuilderModule_ContributeSettingDaggerFragment.SettingFragmentSubcomponent
+                  .Factory
+              get() {
+            return new SettingFragmentSubcomponentFactory();
+          }
+        };
   }
 
   @Override
@@ -263,41 +287,6 @@ public final class DaggerApplicationComponent implements ApplicationComponent {
 
     private BaseDaggerCompatActivity injectBaseDaggerCompatActivity(
         BaseDaggerCompatActivity instance) {
-      DaggerAppCompatActivity_MembersInjector.injectSupportFragmentInjector(
-          instance, getDispatchingAndroidInjectorOfFragment());
-      DaggerAppCompatActivity_MembersInjector.injectFrameworkFragmentInjector(
-          instance, DaggerApplicationComponent.this.getDispatchingAndroidInjectorOfFragment());
-      return instance;
-    }
-  }
-
-  private final class MainActivitySubcomponentFactory
-      implements ActivityBuildersModule_ContributeMainActivity.MainActivitySubcomponent.Factory {
-    @Override
-    public ActivityBuildersModule_ContributeMainActivity.MainActivitySubcomponent create(
-        MainActivity arg0) {
-      Preconditions.checkNotNull(arg0);
-      return new MainActivitySubcomponentImpl(arg0);
-    }
-  }
-
-  private final class MainActivitySubcomponentImpl
-      implements ActivityBuildersModule_ContributeMainActivity.MainActivitySubcomponent {
-    private MainActivitySubcomponentImpl(MainActivity arg0) {}
-
-    private DispatchingAndroidInjector<androidx.fragment.app.Fragment>
-        getDispatchingAndroidInjectorOfFragment() {
-      return DispatchingAndroidInjector_Factory.newInstance(
-          DaggerApplicationComponent.this.getMapOfClassOfAndProviderOfAndroidInjectorFactoryOf(),
-          Collections.<String, Provider<AndroidInjector.Factory<?>>>emptyMap());
-    }
-
-    @Override
-    public void inject(MainActivity arg0) {
-      injectMainActivity(arg0);
-    }
-
-    private MainActivity injectMainActivity(MainActivity instance) {
       DaggerAppCompatActivity_MembersInjector.injectSupportFragmentInjector(
           instance, getDispatchingAndroidInjectorOfFragment());
       DaggerAppCompatActivity_MembersInjector.injectFrameworkFragmentInjector(
@@ -381,6 +370,41 @@ public final class DaggerApplicationComponent implements ApplicationComponent {
     }
   }
 
+  private final class MainActivitySubcomponentFactory
+      implements ActivityBuildersModule_ContributeMainActivity.MainActivitySubcomponent.Factory {
+    @Override
+    public ActivityBuildersModule_ContributeMainActivity.MainActivitySubcomponent create(
+        MainActivity arg0) {
+      Preconditions.checkNotNull(arg0);
+      return new MainActivitySubcomponentImpl(arg0);
+    }
+  }
+
+  private final class MainActivitySubcomponentImpl
+      implements ActivityBuildersModule_ContributeMainActivity.MainActivitySubcomponent {
+    private MainActivitySubcomponentImpl(MainActivity arg0) {}
+
+    private DispatchingAndroidInjector<androidx.fragment.app.Fragment>
+        getDispatchingAndroidInjectorOfFragment() {
+      return DispatchingAndroidInjector_Factory.newInstance(
+          DaggerApplicationComponent.this.getMapOfClassOfAndProviderOfAndroidInjectorFactoryOf(),
+          Collections.<String, Provider<AndroidInjector.Factory<?>>>emptyMap());
+    }
+
+    @Override
+    public void inject(MainActivity arg0) {
+      injectMainActivity(arg0);
+    }
+
+    private MainActivity injectMainActivity(MainActivity instance) {
+      DaggerAppCompatActivity_MembersInjector.injectSupportFragmentInjector(
+          instance, getDispatchingAndroidInjectorOfFragment());
+      DaggerAppCompatActivity_MembersInjector.injectFrameworkFragmentInjector(
+          instance, DaggerApplicationComponent.this.getDispatchingAndroidInjectorOfFragment());
+      return instance;
+    }
+  }
+
   private final class BaseDaggerFragmentSubcomponentFactory
       implements FragmentsBuilderModule_ContributeBaseDaggerFragment.BaseDaggerFragmentSubcomponent
           .Factory {
@@ -395,34 +419,13 @@ public final class DaggerApplicationComponent implements ApplicationComponent {
   private final class BaseDaggerFragmentSubcomponentImpl
       implements FragmentsBuilderModule_ContributeBaseDaggerFragment
           .BaseDaggerFragmentSubcomponent {
-    private Provider<BaseFragmentViewModel> baseFragmentViewModelProvider;
-
-    private BaseDaggerFragmentSubcomponentImpl(BaseDaggerFragment arg0) {
-
-      initialize(arg0);
-    }
+    private BaseDaggerFragmentSubcomponentImpl(BaseDaggerFragment arg0) {}
 
     private DispatchingAndroidInjector<androidx.fragment.app.Fragment>
         getDispatchingAndroidInjectorOfFragment() {
       return DispatchingAndroidInjector_Factory.newInstance(
           DaggerApplicationComponent.this.getMapOfClassOfAndProviderOfAndroidInjectorFactoryOf(),
           Collections.<String, Provider<AndroidInjector.Factory<?>>>emptyMap());
-    }
-
-    private Map<Class<? extends ViewModel>, Provider<ViewModel>>
-        getMapOfClassOfAndProviderOfViewModel() {
-      return Collections.<Class<? extends ViewModel>, Provider<ViewModel>>singletonMap(
-          BaseFragmentViewModel.class, (Provider) baseFragmentViewModelProvider);
-    }
-
-    private ViewModelProviderFactory getViewModelProviderFactory() {
-      return new ViewModelProviderFactory(getMapOfClassOfAndProviderOfViewModel());
-    }
-
-    @SuppressWarnings("unchecked")
-    private void initialize(final BaseDaggerFragment arg0) {
-      this.baseFragmentViewModelProvider =
-          BaseFragmentViewModel_Factory.create(DaggerApplicationComponent.this.applicationProvider);
     }
 
     @Override
@@ -433,8 +436,6 @@ public final class DaggerApplicationComponent implements ApplicationComponent {
     private BaseDaggerFragment injectBaseDaggerFragment(BaseDaggerFragment instance) {
       DaggerFragment_MembersInjector.injectChildFragmentInjector(
           instance, getDispatchingAndroidInjectorOfFragment());
-      BaseDaggerFragment_MembersInjector.injectMProviderFactory(
-          instance, getViewModelProviderFactory());
       return instance;
     }
   }
@@ -452,34 +453,13 @@ public final class DaggerApplicationComponent implements ApplicationComponent {
 
   private final class HomeFragmentSubcomponentImpl
       implements FragmentsBuilderModule_ContributeHomeDaggerFragment.HomeFragmentSubcomponent {
-    private Provider<HomeFragmentViewModel> homeFragmentViewModelProvider;
-
-    private HomeFragmentSubcomponentImpl(HomeFragment arg0) {
-
-      initialize(arg0);
-    }
+    private HomeFragmentSubcomponentImpl(HomeFragment arg0) {}
 
     private DispatchingAndroidInjector<androidx.fragment.app.Fragment>
         getDispatchingAndroidInjectorOfFragment() {
       return DispatchingAndroidInjector_Factory.newInstance(
           DaggerApplicationComponent.this.getMapOfClassOfAndProviderOfAndroidInjectorFactoryOf(),
           Collections.<String, Provider<AndroidInjector.Factory<?>>>emptyMap());
-    }
-
-    private Map<Class<? extends ViewModel>, Provider<ViewModel>>
-        getMapOfClassOfAndProviderOfViewModel() {
-      return Collections.<Class<? extends ViewModel>, Provider<ViewModel>>singletonMap(
-          HomeFragmentViewModel.class, (Provider) homeFragmentViewModelProvider);
-    }
-
-    private ViewModelProviderFactory getViewModelProviderFactory() {
-      return new ViewModelProviderFactory(getMapOfClassOfAndProviderOfViewModel());
-    }
-
-    @SuppressWarnings("unchecked")
-    private void initialize(final HomeFragment arg0) {
-      this.homeFragmentViewModelProvider =
-          HomeFragmentViewModel_Factory.create(DaggerApplicationComponent.this.applicationProvider);
     }
 
     @Override
@@ -490,8 +470,75 @@ public final class DaggerApplicationComponent implements ApplicationComponent {
     private HomeFragment injectHomeFragment(HomeFragment instance) {
       DaggerFragment_MembersInjector.injectChildFragmentInjector(
           instance, getDispatchingAndroidInjectorOfFragment());
-      BaseDaggerFragment_MembersInjector.injectMProviderFactory(
-          instance, getViewModelProviderFactory());
+      return instance;
+    }
+  }
+
+  private final class SearchFragmentSubcomponentFactory
+      implements FragmentsBuilderModule_ContributeSearchFragment.SearchFragmentSubcomponent
+          .Factory {
+    @Override
+    public FragmentsBuilderModule_ContributeSearchFragment.SearchFragmentSubcomponent create(
+        SearchFragment arg0) {
+      Preconditions.checkNotNull(arg0);
+      return new SearchFragmentSubcomponentImpl(arg0);
+    }
+  }
+
+  private final class SearchFragmentSubcomponentImpl
+      implements FragmentsBuilderModule_ContributeSearchFragment.SearchFragmentSubcomponent {
+    private SearchFragmentSubcomponentImpl(SearchFragment arg0) {}
+
+    private DispatchingAndroidInjector<androidx.fragment.app.Fragment>
+        getDispatchingAndroidInjectorOfFragment() {
+      return DispatchingAndroidInjector_Factory.newInstance(
+          DaggerApplicationComponent.this.getMapOfClassOfAndProviderOfAndroidInjectorFactoryOf(),
+          Collections.<String, Provider<AndroidInjector.Factory<?>>>emptyMap());
+    }
+
+    @Override
+    public void inject(SearchFragment arg0) {
+      injectSearchFragment(arg0);
+    }
+
+    private SearchFragment injectSearchFragment(SearchFragment instance) {
+      DaggerFragment_MembersInjector.injectChildFragmentInjector(
+          instance, getDispatchingAndroidInjectorOfFragment());
+      return instance;
+    }
+  }
+
+  private final class SettingFragmentSubcomponentFactory
+      implements FragmentsBuilderModule_ContributeSettingDaggerFragment.SettingFragmentSubcomponent
+          .Factory {
+    @Override
+    public FragmentsBuilderModule_ContributeSettingDaggerFragment.SettingFragmentSubcomponent
+        create(SettingFragment arg0) {
+      Preconditions.checkNotNull(arg0);
+      return new SettingFragmentSubcomponentImpl(arg0);
+    }
+  }
+
+  private final class SettingFragmentSubcomponentImpl
+      implements FragmentsBuilderModule_ContributeSettingDaggerFragment
+          .SettingFragmentSubcomponent {
+    private SettingFragmentSubcomponentImpl(SettingFragment arg0) {}
+
+    private DispatchingAndroidInjector<androidx.fragment.app.Fragment>
+        getDispatchingAndroidInjectorOfFragment() {
+      return DispatchingAndroidInjector_Factory.newInstance(
+          DaggerApplicationComponent.this.getMapOfClassOfAndProviderOfAndroidInjectorFactoryOf(),
+          Collections.<String, Provider<AndroidInjector.Factory<?>>>emptyMap());
+    }
+
+    @Override
+    public void inject(SettingFragment arg0) {
+      injectSettingFragment(arg0);
+    }
+
+    private SettingFragment injectSettingFragment(SettingFragment instance) {
+      DaggerFragment_MembersInjector.injectChildFragmentInjector(
+          instance, getDispatchingAndroidInjectorOfFragment());
       return instance;
     }
   }

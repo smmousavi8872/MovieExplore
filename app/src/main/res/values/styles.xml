@@ -8,4 +8,15 @@
     <item name="colorAccent">@color/colorAccent</item>
   </style>
 
+  <style name="darkEditTextStyle" parent="Theme.AppCompat.Light.DarkActionBar">
+    <item name="colorPrimary">@color/pureWhite</item>
+    <item name="colorPrimaryDark">@color/pureWhite</item>
+    <item name="colorAccent">@color/pureWhite</item>
+  </style>
+
+  <style name="darkTextInputLayoutStyle" parent="@style/TextAppearance.AppCompat">
+    <item name="android:textColor">@color/pureWhite</item>
+  </style>
+
+
 </resources>

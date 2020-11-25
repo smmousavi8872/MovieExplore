@@ -1,6 +1,6 @@
 package com.developer.smmmousavi.balefilm.factory;
 
-import androidx.fragment.app.Fragment;
+import com.developer.smmmousavi.balefilm.fragments.base.BaseDaggerFragment;
 
 public interface SingleFragmentFactory {
 
@@ -9,7 +9,7 @@ public interface SingleFragmentFactory {
     * Functionality: Factory methods which return products
     */
 
-   Fragment createFragment();
+   BaseDaggerFragment createFragment();
 
    String getTag();
 }

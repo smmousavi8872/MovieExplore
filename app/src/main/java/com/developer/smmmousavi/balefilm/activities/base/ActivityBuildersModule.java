@@ -14,11 +14,12 @@ public abstract class ActivityBuildersModule {
     abstract BaseDaggerCompatActivity contributeBaseDaggerCompatActivity();
 
     @ContributesAndroidInjector
-    abstract MainActivity contributeMainActivity();
-
-    @ContributesAndroidInjector
     abstract BaseDrawerActivity contributeBaseDrawerActivity();
 
     @ContributesAndroidInjector
     abstract SingleFragmentActivity contributeSingleFragmentActivity();
+
+    @ContributesAndroidInjector
+    abstract MainActivity contributeMainActivity();
+
 }

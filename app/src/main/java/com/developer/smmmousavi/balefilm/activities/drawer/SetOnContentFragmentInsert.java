@@ -1,14 +1,15 @@
 package com.developer.smmmousavi.balefilm.activities.drawer;
 
+import com.developer.smmmousavi.balefilm.fragments.base.BaseDaggerFragment;
+
 import androidx.annotation.IdRes;
-import androidx.fragment.app.Fragment;
 
 public interface SetOnContentFragmentInsert {
 
     @IdRes
     int getFragmentId();
 
-    Fragment getFragmentObject();
+    BaseDaggerFragment getFragmentObject();
 
     String getFragmentTag();
 }

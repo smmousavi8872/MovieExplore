@@ -6,22 +6,22 @@ import dagger.internal.Factory;
 import javax.inject.Provider;
 
 public final class HomeFragmentViewModel_Factory implements Factory<HomeFragmentViewModel> {
-  private final Provider<Application> appProvider;
+  private final Provider<Application> applicationProvider;
 
-  public HomeFragmentViewModel_Factory(Provider<Application> appProvider) {
-    this.appProvider = appProvider;
+  public HomeFragmentViewModel_Factory(Provider<Application> applicationProvider) {
+    this.applicationProvider = applicationProvider;
   }
 
   @Override
   public HomeFragmentViewModel get() {
-    return new HomeFragmentViewModel(appProvider.get());
+    return new HomeFragmentViewModel(applicationProvider.get());
   }
 
-  public static HomeFragmentViewModel_Factory create(Provider<Application> appProvider) {
-    return new HomeFragmentViewModel_Factory(appProvider);
+  public static HomeFragmentViewModel_Factory create(Provider<Application> applicationProvider) {
+    return new HomeFragmentViewModel_Factory(applicationProvider);
   }
 
-  public static HomeFragmentViewModel newInstance(Application app) {
-    return new HomeFragmentViewModel(app);
+  public static HomeFragmentViewModel newInstance(Application application) {
+    return new HomeFragmentViewModel(application);
   }
 }

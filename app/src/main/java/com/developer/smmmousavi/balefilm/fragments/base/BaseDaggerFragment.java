@@ -6,12 +6,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.developer.smmmousavi.balefilm.R;
-import com.developer.smmmousavi.balefilm.factory.viewmodel.ViewModelProviderFactory;
 
-import javax.inject.Inject;
-
+import androidx.annotation.AnimRes;
+import androidx.annotation.AnimatorRes;
+import androidx.annotation.IdRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.fragment.app.FragmentManager;
 import dagger.android.support.DaggerFragment;
 
 /**
@@ -23,10 +25,13 @@ public class BaseDaggerFragment extends DaggerFragment {
         // Required empty public constructor
     }
 
-    private BaseFragmentViewModel mViewModel;
+    private FragmentManager mFm;
 
-    @Inject
-    ViewModelProviderFactory mProviderFactory;
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mFm = getFragmentManager();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -34,12 +39,11 @@ public class BaseDaggerFragment extends DaggerFragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_base_dagger, container, false);
 
-        initViewModel();
-
         return v;
     }
 
-    private void initViewModel() {
-        mViewModel = ViewModelProviders.of(this, mProviderFactory).get(BaseFragmentViewModel.class);
-    }
+
+
+
+
 }

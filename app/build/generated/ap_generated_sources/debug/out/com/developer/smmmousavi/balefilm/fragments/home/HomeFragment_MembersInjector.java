@@ -2,8 +2,6 @@
 package com.developer.smmmousavi.balefilm.fragments.home;
 
 import androidx.fragment.app.Fragment;
-import com.developer.smmmousavi.balefilm.factory.viewmodel.ViewModelProviderFactory;
-import com.developer.smmmousavi.balefilm.fragments.base.BaseDaggerFragment_MembersInjector;
 import dagger.MembersInjector;
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.support.DaggerFragment_MembersInjector;
@@ -12,27 +10,19 @@ import javax.inject.Provider;
 public final class HomeFragment_MembersInjector implements MembersInjector<HomeFragment> {
   private final Provider<DispatchingAndroidInjector<Fragment>> childFragmentInjectorProvider;
 
-  private final Provider<ViewModelProviderFactory> mProviderFactoryProvider;
-
   public HomeFragment_MembersInjector(
-      Provider<DispatchingAndroidInjector<Fragment>> childFragmentInjectorProvider,
-      Provider<ViewModelProviderFactory> mProviderFactoryProvider) {
+      Provider<DispatchingAndroidInjector<Fragment>> childFragmentInjectorProvider) {
     this.childFragmentInjectorProvider = childFragmentInjectorProvider;
-    this.mProviderFactoryProvider = mProviderFactoryProvider;
   }
 
   public static MembersInjector<HomeFragment> create(
-      Provider<DispatchingAndroidInjector<Fragment>> childFragmentInjectorProvider,
-      Provider<ViewModelProviderFactory> mProviderFactoryProvider) {
-    return new HomeFragment_MembersInjector(
-        childFragmentInjectorProvider, mProviderFactoryProvider);
+      Provider<DispatchingAndroidInjector<Fragment>> childFragmentInjectorProvider) {
+    return new HomeFragment_MembersInjector(childFragmentInjectorProvider);
   }
 
   @Override
   public void injectMembers(HomeFragment instance) {
     DaggerFragment_MembersInjector.injectChildFragmentInjector(
         instance, childFragmentInjectorProvider.get());
-    BaseDaggerFragment_MembersInjector.injectMProviderFactory(
-        instance, mProviderFactoryProvider.get());
   }
 }

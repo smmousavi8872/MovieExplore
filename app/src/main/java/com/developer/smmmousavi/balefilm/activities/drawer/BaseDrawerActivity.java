@@ -10,17 +10,24 @@ import android.view.View;
 
 import com.developer.smmmousavi.balefilm.R;
 import com.developer.smmmousavi.balefilm.activities.base.BaseDaggerCompatActivity;
+import com.developer.smmmousavi.balefilm.fragments.base.BaseDaggerFragment;
 import com.developer.smmmousavi.balefilm.fragments.home.HomeFragment;
+import com.developer.smmmousavi.balefilm.fragments.search.SearchFragment;
+import com.developer.smmmousavi.balefilm.fragments.setting.SettingFragment;
 import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 
+import androidx.annotation.AnimRes;
+import androidx.annotation.AnimatorRes;
+import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatImageView;
-import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -37,9 +44,12 @@ public abstract class BaseDrawerActivity extends BaseDaggerCompatActivity
     DrawerLayout mDrawerLayout;
     @BindView(R.id.mainToolbar)
     AppBarLayout mToolbarLayout;
+    @BindView(R.id.bottomNavView)
+    BottomNavigationView mBottomNavigationView;
 
-    private AppCompatTextView mTxtSignupButton;
     private OnBackPressedListener mOnBackPressedListener;
+    private BaseDaggerFragment mHostedFragment;
+    private boolean mIsToolbarVisible;
 
     public NavigationView getNavigationView() {
         return mNavigationView;
@@ -67,6 +77,8 @@ public abstract class BaseDrawerActivity extends BaseDaggerCompatActivity
 
         initNavView();
 
+        initButtonNavView();
+
         initToolbar();
     }
 
@@ -81,32 +93,78 @@ public abstract class BaseDrawerActivity extends BaseDaggerCompatActivity
         }
     }
 
-
     private void initToolbar() {
-        if (!isToolbarVisible())
-            mToolbarLayout.setVisibility(View.GONE);
-        //TODO: should set the shopping basket count to mTxtShoppingBasketBadge, using SharedPrefUtils
-        //should implement search icon functionality in toolbar
+        mIsToolbarVisible = isToolbarVisible();
+        showToolbar(mIsToolbarVisible);
     }
 
+    private void showToolbar(boolean show) {
+        if (!show) {
+            mIsToolbarVisible = false;
+            mToolbarLayout.setVisibility(View.GONE);
+        } else {
+            mIsToolbarVisible = true;
+            mToolbarLayout.setVisibility(View.VISIBLE);
+        }
+    }
 
     private void initNavView() {
         mNavigationView.setNavigationItemSelectedListener(this);
         mNavigationView.getMenu()
             .getItem(0)
             .setChecked(true);
-
-    /*    // to set listener on views of header, first shoud find them
-        // here is how to get NavigationView header
-        View navHeader = mNavigationView.getHeaderView(0);
-        mTxtSignupButton = navHeader.findViewById(R.id.txtNavbarSignUpButton);
-        mTxtSignupButton.setOnClickListener(v -> {
-            startActivity(SignInSignUpActivity.newIntent(this));
-            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-            new Handler().postDelayed(this::closeDrawer, 600);
-        });*/
     }
 
+    private void initButtonNavView() {
+        mBottomNavigationView.setOnNavigationItemSelectedListener(item -> {
+            switch (item.getItemId()) {
+                case R.id.navbarHome:
+                    if (!(mHostedFragment instanceof HomeFragment)) {
+                        mHostedFragment = HomeFragment.newInstance();
+                        replaceFragment(R.id.flDrawerContentFragmentContainer,
+                            mHostedFragment,
+                            HomeFragment.TAG,
+                            R.anim.activity_right_to_left,
+                            R.anim.activity_right_to_left2,
+                            false);
+                    }
+                    break;
+                case R.id.navbarSearch:
+                    if (!(mHostedFragment instanceof SearchFragment)) {
+                        if (mHostedFragment instanceof HomeFragment) {
+                            mHostedFragment = SearchFragment.newInstance();
+                            replaceFragment(R.id.flDrawerContentFragmentContainer,
+                                mHostedFragment,
+                                SearchFragment.TAG,
+                                R.anim.activity_left_to_right,
+                                R.anim.activity_left_to_right2,
+                                false);
+                        } else if (mHostedFragment instanceof SettingFragment) {
+                            mHostedFragment = SearchFragment.newInstance();
+                            replaceFragment(R.id.flDrawerContentFragmentContainer,
+                                mHostedFragment,
+                                SearchFragment.TAG,
+                                R.anim.activity_right_to_left,
+                                R.anim.activity_right_to_left2,
+                                false);
+                        }
+                    }
+                    break;
+                case R.id.navbarSetting:
+                    if (!(mHostedFragment instanceof SettingFragment)) {
+                        mHostedFragment = SettingFragment.newInstance();
+                        replaceFragment(R.id.flDrawerContentFragmentContainer,
+                            mHostedFragment,
+                            SettingFragment.TAG,
+                            R.anim.activity_left_to_right,
+                            R.anim.activity_left_to_right2,
+                            false);
+                    }
+                    break;
+            }
+            return true;
+        });
+    }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -119,7 +177,7 @@ public abstract class BaseDrawerActivity extends BaseDaggerCompatActivity
     }
 
     private void setNavigationItemAction(@NonNull MenuItem item) {
-        Intent intent = new Intent();
+        Intent intent = null;
         switch (item.getItemId()) {
 
         }
@@ -149,17 +207,46 @@ public abstract class BaseDrawerActivity extends BaseDaggerCompatActivity
 
 
     public void insertContentFragment(SetOnContentFragmentInsert contentSet) {
+        mHostedFragment = contentSet.getFragmentObject();
         int containerId = contentSet.getFragmentId();
-        Fragment fragmentObject = contentSet.getFragmentObject();
         String fragmentTag = contentSet.getFragmentTag();
 
         Fragment foundFragment = mFm.findFragmentById(containerId);
 
         if (foundFragment == null) {
             mFm.beginTransaction()
-                .add(containerId, fragmentObject, fragmentTag)
+                .add(containerId, mHostedFragment, fragmentTag)
                 .commit();
         }
+    }
+
+    public void replaceFragment(@IdRes int containerId,
+                                @NonNull BaseDaggerFragment newFragment,
+                                @NonNull String newTag,
+                                @AnimatorRes @AnimRes int enterAnimId,
+                                @AnimatorRes @AnimRes int exitAnimId,
+                                boolean popPrevious) {
+
+        assert getFragmentManager() != null;
+        FragmentManager fm = getSupportFragmentManager();
+        BaseDaggerFragment foundFragment = (BaseDaggerFragment) fm.findFragmentByTag(newTag);
+        if (popPrevious) {
+            int frgCount = fm.getBackStackEntryCount();
+            if (frgCount > 0)
+                fm.popBackStack();
+        }
+
+        if (foundFragment == null)
+            fm.beginTransaction()
+                .setCustomAnimations(enterAnimId, exitAnimId)
+                .replace(containerId, newFragment, newTag)
+                .addToBackStack(newTag)
+                .commit();
+        else
+            fm.beginTransaction()
+                .setCustomAnimations(enterAnimId, exitAnimId)
+                .replace(containerId, newFragment, newTag)
+                .commit();
     }
 
     @OnClick(R.id.imgNavbarButton)

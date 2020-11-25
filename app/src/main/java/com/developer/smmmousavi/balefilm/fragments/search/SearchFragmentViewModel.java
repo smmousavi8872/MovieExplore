@@ -1,4 +1,4 @@
-package com.developer.smmmousavi.balefilm.fragments.home;
+package com.developer.smmmousavi.balefilm.fragments.search;
 
 import android.app.Application;
 
@@ -8,10 +8,10 @@ import javax.inject.Inject;
 
 import androidx.annotation.NonNull;
 
-public class HomeFragmentViewModel extends BaseViewModel {
+public class SearchFragmentViewModel extends BaseViewModel {
 
     @Inject
-    public HomeFragmentViewModel(@NonNull Application application) {
+    public SearchFragmentViewModel(@NonNull Application application) {
         super(application);
     }
 }

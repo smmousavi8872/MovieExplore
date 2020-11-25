@@ -11,6 +11,7 @@ import butterknife.internal.DebouncingOnClickListener;
 import butterknife.internal.Utils;
 import com.developer.smmmousavi.balefilm.R;
 import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import java.lang.IllegalStateException;
 import java.lang.Override;
@@ -18,7 +19,7 @@ import java.lang.Override;
 public class BaseDrawerActivity_ViewBinding implements Unbinder {
   private BaseDrawerActivity target;
 
-  private View view7f080094;
+  private View view7f080097;
 
   @UiThread
   public BaseDrawerActivity_ViewBinding(BaseDrawerActivity target) {
@@ -32,7 +33,7 @@ public class BaseDrawerActivity_ViewBinding implements Unbinder {
     View view;
     view = Utils.findRequiredView(source, R.id.imgNavbarButton, "field 'imgNavbarButton' and method 'setNavBarListener'");
     target.imgNavbarButton = Utils.castView(view, R.id.imgNavbarButton, "field 'imgNavbarButton'", AppCompatImageView.class);
-    view7f080094 = view;
+    view7f080097 = view;
     view.setOnClickListener(new DebouncingOnClickListener() {
       @Override
       public void doClick(View p0) {
@@ -42,6 +43,7 @@ public class BaseDrawerActivity_ViewBinding implements Unbinder {
     target.mNavigationView = Utils.findRequiredViewAsType(source, R.id.navbarView, "field 'mNavigationView'", NavigationView.class);
     target.mDrawerLayout = Utils.findRequiredViewAsType(source, R.id.dlMainFragmentDrawer, "field 'mDrawerLayout'", DrawerLayout.class);
     target.mToolbarLayout = Utils.findRequiredViewAsType(source, R.id.mainToolbar, "field 'mToolbarLayout'", AppBarLayout.class);
+    target.mBottomNavigationView = Utils.findRequiredViewAsType(source, R.id.bottomNavView, "field 'mBottomNavigationView'", BottomNavigationView.class);
   }
 
   @Override
@@ -55,8 +57,9 @@ public class BaseDrawerActivity_ViewBinding implements Unbinder {
     target.mNavigationView = null;
     target.mDrawerLayout = null;
     target.mToolbarLayout = null;
+    target.mBottomNavigationView = null;
 
-    view7f080094.setOnClickListener(null);
-    view7f080094 = null;
+    view7f080097.setOnClickListener(null);
+    view7f080097 = null;
   }
 }

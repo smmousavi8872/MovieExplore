@@ -7,7 +7,7 @@
   android:layout_width="match_parent"
   android:layout_height="match_parent"
   android:fitsSystemWindows="true"
-  tools:context=".activities.drawer.BaseDrawerActivity"
+  tools:context="com.developer.smmmousavi.balefilm.activities.drawer.BaseDrawerActivity"
   tools:openDrawer="end">
 
   <RelativeLayout
@@ -17,23 +17,24 @@
     <FrameLayout
       android:id="@+id/flDrawerContentFragmentContainer"
       android:layout_width="match_parent"
-      android:layout_height="wrap_content"
+      android:layout_height="match_parent"
       android:layout_below="@id/mainToolbar">
 
     </FrameLayout>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+      android:id="@+id/bottomNavView"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_alignParentBottom="true"
+      android:background="@color/blackTransparent"
+      app:menu="@menu/menu_bottom_nav" />
 
     <include
       android:id="@+id/mainToolbar"
       layout="@layout/toolbar_main"
       android:layout_width="match_parent"
       android:layout_height="wrap_content" />
-
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-      android:layout_width="match_parent"
-      android:background="@color/blackTransparent"
-      android:layout_alignParentBottom="true"
-      app:menu="@menu/menu_bottom_nav"
-      android:layout_height="wrap_content"/>
   </RelativeLayout>
 
   <com.google.android.material.navigation.NavigationView
