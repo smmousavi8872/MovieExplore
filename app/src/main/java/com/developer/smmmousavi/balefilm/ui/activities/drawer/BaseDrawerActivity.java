@@ -10,6 +10,7 @@ import android.view.View;
 
 import com.developer.smmmousavi.balefilm.R;
 import com.developer.smmmousavi.balefilm.ui.activities.base.BaseDaggerCompatActivity;
+import com.developer.smmmousavi.balefilm.ui.adapter.PagerAdapter;
 import com.developer.smmmousavi.balefilm.ui.fragments.base.BaseDaggerFragment;
 import com.developer.smmmousavi.balefilm.ui.fragments.home.HomeFragment;
 import com.developer.smmmousavi.balefilm.ui.fragments.search.SearchFragment;
@@ -18,6 +19,9 @@ import com.developer.smmmousavi.balefilm.util.KeyboardUtils;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import androidx.annotation.AnimRes;
 import androidx.annotation.AnimatorRes;
@@ -29,12 +33,16 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public abstract class BaseDrawerActivity extends BaseDaggerCompatActivity
     implements NavigationView.OnNavigationItemSelectedListener, OnBackPressedListener, SetOnContentFragmentInsert, SetOnToolbarVisibility {
+
+    private static final String TAG = "BaseDrawerActivity";
 
 
     @BindView(R.id.imgNavbarButton)
@@ -47,10 +55,13 @@ public abstract class BaseDrawerActivity extends BaseDaggerCompatActivity
     AppBarLayout mToolbarLayout;
     @BindView(R.id.bottomNavView)
     BottomNavigationView mBottomNavigationView;
+    @BindView(R.id.mainViewPager)
+    ViewPager mViewPager;
 
     private OnBackPressedListener mOnBackPressedListener;
     private BaseDaggerFragment mHostedFragment;
     private boolean mIsToolbarVisible;
+    private List<BaseDaggerFragment> mFragmentList;
 
     public NavigationView getNavigationView() {
         return mNavigationView;
@@ -74,14 +85,17 @@ public abstract class BaseDrawerActivity extends BaseDaggerCompatActivity
 
         setStateBarColor();
 
-        insertContentFragment(this);
+        //insertContentFragment(this);
 
         initNavView();
 
         initButtonNavView();
 
         initToolbar();
+
+        initViewPager();
     }
+
 
     private void setStateBarColor() {
         if (Build.VERSION.SDK_INT >= 21) {
@@ -116,6 +130,45 @@ public abstract class BaseDrawerActivity extends BaseDaggerCompatActivity
             .setChecked(true);
     }
 
+    private void initViewPager() {
+        PagerAdapter adapter = new PagerAdapter(getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
+        setFragmentList();
+        adapter.setFragments(mFragmentList);
+        mViewPager.setAdapter(adapter);
+        mViewPager.setOffscreenPageLimit(3);
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                switch (position) {
+                    case 0:
+                        mBottomNavigationView.getMenu().findItem(R.id.navbarHome).setChecked(true);
+                        break;
+                    case 1:
+                        mBottomNavigationView.getMenu().findItem(R.id.navbarSearch).setChecked(true);
+                        break;
+                    case 2:
+                        mBottomNavigationView.getMenu().findItem(R.id.navbarSetting).setChecked(true);
+                        break;
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+            }
+        });
+    }
+
+    private void setFragmentList() {
+        mFragmentList = new ArrayList<>();
+        mFragmentList.add(HomeFragment.newInstance());
+        mFragmentList.add(SearchFragment.newInstance());
+        mFragmentList.add(SettingFragment.newInstance());
+    }
+
     private void initButtonNavView() {
         mBottomNavigationView.setOnNavigationItemSelectedListener(item -> {
             switch (item.getItemId()) {
@@ -123,38 +176,40 @@ public abstract class BaseDrawerActivity extends BaseDaggerCompatActivity
                     if (!(mHostedFragment instanceof HomeFragment)) {
                         KeyboardUtils.hideKeyboard(this);
                         mHostedFragment = HomeFragment.newInstance();
-                        replaceFragment(R.id.flDrawerContentFragmentContainer,
+                        mViewPager.setCurrentItem(0);
+                        /*replaceFragment(R.id.flDrawerContentFragmentContainer,
                             mHostedFragment,
                             HomeFragment.TAG,
                             R.anim.activity_right_to_left,
                             R.anim.activity_right_to_left2,
-                            false);
+                            false);*/
                     } else {
-                        HomeFragment fragment = (HomeFragment) getSupportFragmentManager().findFragmentByTag(HomeFragment.TAG);
+                        HomeFragment fragment = (HomeFragment) mFragmentList.get(0);
                         fragment.smoothScrollTop();
                     }
                     break;
                 case R.id.navbarSearch:
                     if (!(mHostedFragment instanceof SearchFragment)) {
+                        mViewPager.setCurrentItem(1);
                         if (mHostedFragment instanceof HomeFragment) {
                             mHostedFragment = SearchFragment.newInstance();
-                            replaceFragment(R.id.flDrawerContentFragmentContainer,
+                            /*replaceFragment(R.id.flDrawerContentFragmentContainer,
                                 mHostedFragment,
                                 SearchFragment.TAG,
                                 R.anim.activity_left_to_right,
                                 R.anim.activity_left_to_right2,
-                                false);
+                                false);*/
                         } else if (mHostedFragment instanceof SettingFragment) {
                             mHostedFragment = SearchFragment.newInstance();
-                            replaceFragment(R.id.flDrawerContentFragmentContainer,
+                            /*replaceFragment(R.id.flDrawerContentFragmentContainer,
                                 mHostedFragment,
                                 SearchFragment.TAG,
                                 R.anim.activity_right_to_left,
                                 R.anim.activity_right_to_left2,
-                                false);
+                                false);*/
                         }
                     } else {
-                        SearchFragment fragment = (SearchFragment) getSupportFragmentManager().findFragmentByTag(SearchFragment.TAG);
+                        SearchFragment fragment = (SearchFragment) mFragmentList.get(1);
                         fragment.smoothScrollTop();
                     }
                     break;
@@ -162,12 +217,13 @@ public abstract class BaseDrawerActivity extends BaseDaggerCompatActivity
                     if (!(mHostedFragment instanceof SettingFragment)) {
                         KeyboardUtils.hideKeyboard(this);
                         mHostedFragment = SettingFragment.newInstance();
-                        replaceFragment(R.id.flDrawerContentFragmentContainer,
+                        mViewPager.setCurrentItem(2);
+                        /*replaceFragment(R.id.flDrawerContentFragmentContainer,
                             mHostedFragment,
                             SettingFragment.TAG,
                             R.anim.activity_left_to_right,
                             R.anim.activity_left_to_right2,
-                            false);
+                            false);*/
                     }
                     break;
             }
@@ -258,11 +314,12 @@ public abstract class BaseDrawerActivity extends BaseDaggerCompatActivity
                 .commit();
     }
 
+
     @OnClick(R.id.imgNavbarButton)
     void setNavBarListener() {
-        HomeFragment homeDrawerFragment = (HomeFragment) mFm.findFragmentByTag(HomeFragment.TAG);
-        if (homeDrawerFragment != null)
-            mDrawerLayout.openDrawer(GravityCompat.START);
+//        HomeFragment homeDrawerFragment = (HomeFragment) mFm.findFragmentByTag(HomeFragment.TAG);
+//        if (homeDrawerFragment != null)
+        mDrawerLayout.openDrawer(GravityCompat.START);
         setOnBackPressedListener(this);
     }
 
@@ -289,7 +346,6 @@ public abstract class BaseDrawerActivity extends BaseDaggerCompatActivity
     @Override
     public void onBack() {
         closeDrawer();
-
     }
 }
 

@@ -22,7 +22,8 @@ public interface MovieRestApi {
     Call<MovieResponse> searchMovies(
         @Query("api_key") String apiKey,
         @Query("query") String query,
-        @Query("page") int page
+        @Query("page") int page,
+        @Query("sort_by") String sortBy
     );
 
     @GET("genre/movie/list")

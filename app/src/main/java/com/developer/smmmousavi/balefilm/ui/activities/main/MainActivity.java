@@ -1,6 +1,5 @@
 package com.developer.smmmousavi.balefilm.ui.activities.main;
 
-import com.developer.smmmousavi.balefilm.R;
 import com.developer.smmmousavi.balefilm.ui.activities.drawer.BaseDrawerActivity;
 import com.developer.smmmousavi.balefilm.ui.fragments.base.BaseDaggerFragment;
 import com.developer.smmmousavi.balefilm.ui.fragments.home.HomeFragment;
@@ -9,7 +8,7 @@ public class MainActivity extends BaseDrawerActivity {
 
     @Override
     public int getFragmentId() {
-        return R.id.flDrawerContentFragmentContainer;
+        return 0;
     }
 
     @Override

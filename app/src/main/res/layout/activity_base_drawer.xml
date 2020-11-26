@@ -14,13 +14,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <FrameLayout
-      android:id="@+id/flDrawerContentFragmentContainer"
+    <include
+      android:id="@+id/mainToolbar"
+      layout="@layout/toolbar_main"
       android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:layout_below="@id/mainToolbar">
+      android:layout_height="wrap_content" />
 
-    </FrameLayout>
+    <androidx.viewpager.widget.ViewPager
+      android:layout_below="@id/mainToolbar"
+      android:id="@+id/mainViewPager"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
       android:id="@+id/bottomNavView"
@@ -30,11 +34,6 @@
       android:background="@color/blackLowTransparent"
       app:menu="@menu/menu_bottom_nav" />
 
-    <include
-      android:id="@+id/mainToolbar"
-      layout="@layout/toolbar_main"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content" />
   </RelativeLayout>
 
   <com.google.android.material.navigation.NavigationView

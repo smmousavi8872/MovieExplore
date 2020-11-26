@@ -19,12 +19,12 @@ public class Sort {
     }
 
     public static final String[] SORT_VALUES = {
-        "popularity.asc",
-        "release_date.asc",
-        "revenue.asc",
-        "original_title.asc",
-        "vote_average.asc",
-        "vote_count.asc",
+        "popularity.desc",
+        "release_date.desc",
+        "revenue.desc",
+        "original_title.desc",
+        "vote_average.desc",
+        "vote_count.desc",
     };
 
     public static final String[] SORT_Names = {
@@ -37,7 +37,7 @@ public class Sort {
     };
 
 
-    public static List<Sort> getSortList() {
+    public  static List<Sort> getSortList() {
         List<Sort> sortList = new ArrayList<>();
         for (int i = 0; i < SORT_VALUES.length; i++)
             sortList.add(new Sort(SORT_Names[i], SORT_VALUES[i]));

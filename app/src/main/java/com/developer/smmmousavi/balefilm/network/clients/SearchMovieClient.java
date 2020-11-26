@@ -52,7 +52,7 @@ public class SearchMovieClient {
         if (mPage == 0)
             mPage = 1;
         MovieRestApiFactory.create()
-            .searchMovies(Constants.API_KEY, query, mPage)
+            .searchMovies(Constants.API_KEY, query, mPage, "popularity.desc")
             .enqueue(new Callback<MovieResponse>() {
                 @Override
                 public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response) {
