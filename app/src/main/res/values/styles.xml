@@ -6,6 +6,9 @@
     <item name="colorPrimary">@color/colorPrimary</item>
     <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
     <item name="colorAccent">@color/colorAccent</item>
+    <item name="android:statusBarColor">@color/pureBlack</item>
+    <item name="android:windowLightStatusBar">true</item>
+
   </style>
 
   <style name="darkEditTextStyle" parent="Theme.AppCompat.Light.DarkActionBar">
@@ -17,6 +20,8 @@
   <style name="darkTextInputLayoutStyle" parent="@style/TextAppearance.AppCompat">
     <item name="android:textColor">@color/pureWhite</item>
   </style>
+
+
 
 
 </resources>

@@ -6,5 +6,6 @@
   <color name="pureBlack">#000</color>
   <color name="pureWhite">#fff</color>
   <color name="blackTransparent">#88000000</color>
+  <color name="colorDarkGrey">#aaaaaa</color>
 
 </resources>

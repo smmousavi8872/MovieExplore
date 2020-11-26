@@ -7,29 +7,38 @@ import android.app.Fragment;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.ContentProvider;
-import com.developer.smmmousavi.balefilm.activities.base.ActivityBuildersModule_ContributeBaseDaggerCompatActivity;
-import com.developer.smmmousavi.balefilm.activities.base.ActivityBuildersModule_ContributeBaseDrawerActivity;
-import com.developer.smmmousavi.balefilm.activities.base.ActivityBuildersModule_ContributeMainActivity;
-import com.developer.smmmousavi.balefilm.activities.base.ActivityBuildersModule_ContributeSingleFragmentActivity;
-import com.developer.smmmousavi.balefilm.activities.base.BaseDaggerCompatActivity;
-import com.developer.smmmousavi.balefilm.activities.drawer.BaseDrawerActivity;
-import com.developer.smmmousavi.balefilm.activities.main.MainActivity;
-import com.developer.smmmousavi.balefilm.activities.singlefragment.SingleFragmentActivity;
+import androidx.lifecycle.ViewModel;
 import com.developer.smmmousavi.balefilm.application.BaseApplication;
-import com.developer.smmmousavi.balefilm.fragments.base.BaseDaggerFragment;
-import com.developer.smmmousavi.balefilm.fragments.base.di.FragmentsBuilderModule_ContributeBaseDaggerFragment;
-import com.developer.smmmousavi.balefilm.fragments.base.di.FragmentsBuilderModule_ContributeHomeDaggerFragment;
-import com.developer.smmmousavi.balefilm.fragments.base.di.FragmentsBuilderModule_ContributeSearchFragment;
-import com.developer.smmmousavi.balefilm.fragments.base.di.FragmentsBuilderModule_ContributeSettingDaggerFragment;
-import com.developer.smmmousavi.balefilm.fragments.home.HomeFragment;
-import com.developer.smmmousavi.balefilm.fragments.search.SearchFragment;
-import com.developer.smmmousavi.balefilm.fragments.setting.SettingFragment;
+import com.developer.smmmousavi.balefilm.factory.viewmodel.ViewModelProviderFactory;
+import com.developer.smmmousavi.balefilm.repository.MovieRepository;
+import com.developer.smmmousavi.balefilm.ui.activities.base.ActivityBuildersModule_ContributeBaseDaggerCompatActivity;
+import com.developer.smmmousavi.balefilm.ui.activities.base.ActivityBuildersModule_ContributeBaseDrawerActivity;
+import com.developer.smmmousavi.balefilm.ui.activities.base.ActivityBuildersModule_ContributeMainActivity;
+import com.developer.smmmousavi.balefilm.ui.activities.base.ActivityBuildersModule_ContributeSingleFragmentActivity;
+import com.developer.smmmousavi.balefilm.ui.activities.base.BaseDaggerCompatActivity;
+import com.developer.smmmousavi.balefilm.ui.activities.drawer.BaseDrawerActivity;
+import com.developer.smmmousavi.balefilm.ui.activities.main.MainActivity;
+import com.developer.smmmousavi.balefilm.ui.activities.singlefragment.SingleFragmentActivity;
+import com.developer.smmmousavi.balefilm.ui.fragments.base.BaseDaggerFragment;
+import com.developer.smmmousavi.balefilm.ui.fragments.base.di.FragmentsBuilderModule_ContributeBaseDaggerFragment;
+import com.developer.smmmousavi.balefilm.ui.fragments.base.di.FragmentsBuilderModule_ContributeHomeDaggerFragment;
+import com.developer.smmmousavi.balefilm.ui.fragments.base.di.FragmentsBuilderModule_ContributeSearchFragment;
+import com.developer.smmmousavi.balefilm.ui.fragments.base.di.FragmentsBuilderModule_ContributeSettingDaggerFragment;
+import com.developer.smmmousavi.balefilm.ui.fragments.home.HomeFragment;
+import com.developer.smmmousavi.balefilm.ui.fragments.home.HomeFragmentViewModel;
+import com.developer.smmmousavi.balefilm.ui.fragments.home.HomeFragmentViewModel_Factory;
+import com.developer.smmmousavi.balefilm.ui.fragments.home.HomeFragment_MembersInjector;
+import com.developer.smmmousavi.balefilm.ui.fragments.home.di.HomeFragmentModule;
+import com.developer.smmmousavi.balefilm.ui.fragments.home.di.HomeFragmentModule_ProvideMovieRepositoryFactory;
+import com.developer.smmmousavi.balefilm.ui.fragments.search.SearchFragment;
+import com.developer.smmmousavi.balefilm.ui.fragments.setting.SettingFragment;
 import dagger.android.AndroidInjector;
 import dagger.android.DaggerApplication_MembersInjector;
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.DispatchingAndroidInjector_Factory;
 import dagger.android.support.DaggerAppCompatActivity_MembersInjector;
 import dagger.android.support.DaggerFragment_MembersInjector;
+import dagger.internal.InstanceFactory;
 import dagger.internal.MapBuilder;
 import dagger.internal.Preconditions;
 import java.util.Collections;
@@ -73,9 +82,11 @@ public final class DaggerApplicationComponent implements ApplicationComponent {
               .Factory>
       settingFragmentSubcomponentFactoryProvider;
 
-  private DaggerApplicationComponent(Application application) {
+  private Provider<Application> applicationProvider;
 
-    initialize(application);
+  private DaggerApplicationComponent(Application applicationParam) {
+
+    initialize(applicationParam);
   }
 
   public static ApplicationComponent.Builder builder() {
@@ -133,7 +144,7 @@ public final class DaggerApplicationComponent implements ApplicationComponent {
   }
 
   @SuppressWarnings("unchecked")
-  private void initialize(final Application application) {
+  private void initialize(final Application applicationParam) {
     this.baseDaggerCompatActivitySubcomponentFactoryProvider =
         new Provider<
             ActivityBuildersModule_ContributeBaseDaggerCompatActivity
@@ -218,6 +229,7 @@ public final class DaggerApplicationComponent implements ApplicationComponent {
             return new SettingFragmentSubcomponentFactory();
           }
         };
+    this.applicationProvider = InstanceFactory.create(applicationParam);
   }
 
   @Override
@@ -447,19 +459,47 @@ public final class DaggerApplicationComponent implements ApplicationComponent {
     public FragmentsBuilderModule_ContributeHomeDaggerFragment.HomeFragmentSubcomponent create(
         HomeFragment arg0) {
       Preconditions.checkNotNull(arg0);
-      return new HomeFragmentSubcomponentImpl(arg0);
+      return new HomeFragmentSubcomponentImpl(new HomeFragmentModule(), arg0);
     }
   }
 
   private final class HomeFragmentSubcomponentImpl
       implements FragmentsBuilderModule_ContributeHomeDaggerFragment.HomeFragmentSubcomponent {
-    private HomeFragmentSubcomponentImpl(HomeFragment arg0) {}
+    private Provider<MovieRepository> provideMovieRepositoryProvider;
+
+    private Provider<HomeFragmentViewModel> homeFragmentViewModelProvider;
+
+    private HomeFragmentSubcomponentImpl(
+        HomeFragmentModule homeFragmentModuleParam, HomeFragment arg0) {
+
+      initialize(homeFragmentModuleParam, arg0);
+    }
 
     private DispatchingAndroidInjector<androidx.fragment.app.Fragment>
         getDispatchingAndroidInjectorOfFragment() {
       return DispatchingAndroidInjector_Factory.newInstance(
           DaggerApplicationComponent.this.getMapOfClassOfAndProviderOfAndroidInjectorFactoryOf(),
           Collections.<String, Provider<AndroidInjector.Factory<?>>>emptyMap());
+    }
+
+    private Map<Class<? extends ViewModel>, Provider<ViewModel>>
+        getMapOfClassOfAndProviderOfViewModel() {
+      return Collections.<Class<? extends ViewModel>, Provider<ViewModel>>singletonMap(
+          HomeFragmentViewModel.class, (Provider) homeFragmentViewModelProvider);
+    }
+
+    private ViewModelProviderFactory getViewModelProviderFactory() {
+      return new ViewModelProviderFactory(getMapOfClassOfAndProviderOfViewModel());
+    }
+
+    @SuppressWarnings("unchecked")
+    private void initialize(
+        final HomeFragmentModule homeFragmentModuleParam, final HomeFragment arg0) {
+      this.provideMovieRepositoryProvider =
+          HomeFragmentModule_ProvideMovieRepositoryFactory.create(homeFragmentModuleParam);
+      this.homeFragmentViewModelProvider =
+          HomeFragmentViewModel_Factory.create(
+              DaggerApplicationComponent.this.applicationProvider, provideMovieRepositoryProvider);
     }
 
     @Override
@@ -470,6 +510,7 @@ public final class DaggerApplicationComponent implements ApplicationComponent {
     private HomeFragment injectHomeFragment(HomeFragment instance) {
       DaggerFragment_MembersInjector.injectChildFragmentInjector(
           instance, getDispatchingAndroidInjectorOfFragment());
+      HomeFragment_MembersInjector.injectMProviderFactory(instance, getViewModelProviderFactory());
       return instance;
     }
   }

@@ -1,6 +1,6 @@
 package com.developer.smmmousavi.balefilm.factory;
 
-import com.developer.smmmousavi.balefilm.fragments.base.BaseDaggerFragment;
+import com.developer.smmmousavi.balefilm.ui.fragments.base.BaseDaggerFragment;
 
 public interface SingleFragmentFactory {
 

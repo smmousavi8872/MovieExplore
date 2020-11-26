@@ -1,22 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
   android:background="@color/pureBlack"
   android:orientation="vertical"
-  tools:context=".fragments.home.HomeFragment">
+  tools:context=".ui.fragments.home.HomeFragment">
+
+  <LinearLayout
+    android:id="@+id/llSpinnerContainer"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="16dp"
+    app:layout_constraintTop_toTopOf="parent">
+
+    <androidx.appcompat.widget.AppCompatSpinner
+      android:id="@+id/sprGenre"
+      android:layout_width="0dp"
+      android:layout_height="match_parent"
+      android:layout_marginStart="4dp"
+      android:layout_marginEnd="2dp"
+      android:layout_weight="1"
+      android:background="@drawable/bg_spinner"
+      android:popupBackground="@color/pureBlack" />
+
+    <androidx.appcompat.widget.AppCompatSpinner
+      android:id="@+id/sprSortBy"
+      android:layout_width="0dp"
+      android:layout_height="match_parent"
+      android:layout_marginStart="2dp"
+      android:layout_marginEnd="2dp"
+      android:layout_weight="1"
+      android:background="@drawable/bg_spinner"
+      android:popupBackground="@color/pureBlack" />
+
+    <androidx.appcompat.widget.AppCompatSpinner
+      android:id="@+id/sprYear"
+      android:layout_width="0dp"
+      android:layout_height="match_parent"
+      android:layout_marginStart="2dp"
+      android:layout_marginEnd="4dp"
+      android:layout_weight="1"
+      android:background="@drawable/bg_spinner"
+      android:popupBackground="@color/pureBlack" />
+
+  </LinearLayout>
 
   <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    app:layout_constraintTop_toBottomOf="@id/llSpinnerContainer">
 
     <androidx.recyclerview.widget.RecyclerView
+      android:id="@+id/mainMoviesRv"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
+      android:paddingTop="16dp"
       app:layout_constraintTop_toTopOf="parent" />
 
   </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

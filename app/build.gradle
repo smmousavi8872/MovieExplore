@@ -66,12 +66,11 @@ dependencies {
 
     //retrofit
     def retrofitVersion = "2.5.0"
+    def okHttpVersion = "3.12.3"
     implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
     implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
-    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.4.0'
-    implementation 'com.squareup.moshi:moshi:1.8.0'
-    implementation 'com.squareup.okhttp3:okhttp:3.12.3'
-    implementation 'com.squareup.okhttp3:okhttp-urlconnection:3.4.1'
+    implementation "com.squareup.okhttp3:okhttp:$okHttpVersion"
+    implementation "com.squareup.okhttp3:okhttp-urlconnection:$okHttpVersion"
     implementation 'com.squareup.okhttp3:logging-interceptor:3.9.1'
 
     //material design
@@ -95,4 +94,10 @@ dependencies {
     //butterknife
     implementation 'com.jakewharton:butterknife:10.2.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:10.0.0'
+
+    //Room
+    def room_version = "2.2.5"
+    //noinspection GradleDependency
+    implementation "androidx.room:room-runtime:$room_version"
+    annotationProcessor "androidx.room:room-compiler:$room_version"
 }

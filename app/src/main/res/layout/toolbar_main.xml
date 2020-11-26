@@ -4,14 +4,13 @@
   android:id="@+id/abAppBar"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
-    android:background="@color/pureBlack"
+  android:background="@color/colorPrimary"
   android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
   <androidx.appcompat.widget.Toolbar
     android:id="@+id/tbMainToolbar"
     android:layout_width="match_parent"
     android:layout_height="?attr/actionBarSize"
-    android:background="@color/pureBlack"
     app:layout_scrollFlags="scroll|enterAlways"
     app:popupTheme="@style/Theme.AppCompat.Light">
 
@@ -24,22 +23,19 @@
       <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/imgNavbarButton"
         android:layout_width="wrap_content"
-        android:paddingTop="8dp"
-        android:paddingBottom="8dp"
-        android:layout_height="wrap_content"
-        android:layout_weight=".1"
+        android:layout_height="match_parent"
+        android:padding="8dp"
         app:srcCompat="@drawable/ic_navbar_white" />
 
-      <androidx.appcompat.widget.AppCompatSpinner
-        android:layout_width="0dp"
-        android:layout_weight=".7"
-        android:layout_height="wrap_content"/>
-
-      <View
-        android:layout_weight=".2"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"/>
-
+      <androidx.appcompat.widget.AppCompatTextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="start|center_vertical"
+        android:padding="8dp"
+        android:text="Bale Film"
+        android:textColor="@color/pureBlack"
+        android:textSize="24dp"
+        app:fontFamily="sans-serif-medium" />
     </LinearLayout>
 
   </androidx.appcompat.widget.Toolbar>
