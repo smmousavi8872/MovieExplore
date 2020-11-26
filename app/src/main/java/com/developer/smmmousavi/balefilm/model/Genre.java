@@ -34,10 +34,7 @@ public class Genre extends BaseModel {
 
     @Override
     public String toString() {
-        return "Genre{" +
-            "id=" + id +
-            ", name='" + name + '\'' +
-            '}';
+        return name;
     }
 
     @Override

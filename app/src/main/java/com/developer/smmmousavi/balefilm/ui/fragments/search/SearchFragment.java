@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import com.developer.smmmousavi.balefilm.R;
 import com.developer.smmmousavi.balefilm.ui.fragments.base.BaseDaggerFragment;
 
+import butterknife.ButterKnife;
+
 public class SearchFragment extends BaseDaggerFragment {
 
     public static final String TAG = "SearchFragmentTag";
@@ -33,6 +35,7 @@ public class SearchFragment extends BaseDaggerFragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_search, container, false);
+        ButterKnife.bind(this, v);
         return v;
     }
 }

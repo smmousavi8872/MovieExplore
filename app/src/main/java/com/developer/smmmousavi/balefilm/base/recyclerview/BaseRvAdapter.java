@@ -15,13 +15,12 @@ public abstract class BaseRvAdapter<T> extends RecyclerView.Adapter<RecyclerView
     protected static final int FOOTER = 2;
 
     protected List<T> mItemList;
-    protected OnItemClickListener mOnItemClickListener;
-    protected OnReloadClickListener mOnReloadClickListener;
+    protected OnRvItemClickListener mOnItemClickListener;
     protected boolean mIsFooterAdded = false;
 
     protected abstract RecyclerView.ViewHolder createHeaderViewHolder(ViewGroup parent);
 
-    protected abstract RecyclerView.ViewHolder createItemViewHolder(ViewGroup parent);
+    protected abstract RecyclerView.ViewHolder createItemViewHolder(ViewGroup parent, OnRvItemClickListener listener);
 
     protected abstract RecyclerView.ViewHolder createFooterViewHolder(ViewGroup parent);
 
@@ -44,6 +43,11 @@ public abstract class BaseRvAdapter<T> extends RecyclerView.Adapter<RecyclerView
         ERROR
     }
 
+    public BaseRvAdapter(OnRvItemClickListener listener) {
+        mOnItemClickListener = listener;
+
+    }
+
     public void setItemList(List<T> items) {
         mItemList = items;
         notifyDataSetChanged();
@@ -63,13 +67,13 @@ public abstract class BaseRvAdapter<T> extends RecyclerView.Adapter<RecyclerView
                 viewHolder = createHeaderViewHolder(parent);
                 break;
             case ITEM:
-                viewHolder = createItemViewHolder(parent);
+                viewHolder = createItemViewHolder(parent, mOnItemClickListener);
                 break;
             case FOOTER:
                 viewHolder = createFooterViewHolder(parent);
                 break;
             default:
-                viewHolder = createItemViewHolder(parent);
+                viewHolder = createItemViewHolder(parent, mOnItemClickListener);
         }
         return viewHolder;
     }
@@ -161,11 +165,7 @@ public abstract class BaseRvAdapter<T> extends RecyclerView.Adapter<RecyclerView
         }
     }
 
-    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+    public void setOnItemClickListener(OnRvItemClickListener onItemClickListener) {
         mOnItemClickListener = onItemClickListener;
-    }
-
-    public void setOnReloadClickListener(OnReloadClickListener onReloadClickListener) {
-        mOnReloadClickListener = onReloadClickListener;
     }
 }

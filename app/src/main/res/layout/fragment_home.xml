@@ -48,6 +48,7 @@
   </LinearLayout>
 
   <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+    android:id="@+id/swpRefresh"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:layout_constraintTop_toBottomOf="@id/llSpinnerContainer">
@@ -60,5 +61,15 @@
       app:layout_constraintTop_toTopOf="parent" />
 
   </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+  <ProgressBar
+    android:id="@+id/prgLoadingMain"
+    android:layout_width="64dp"
+    android:layout_height="64dp"
+    android:indeterminateTint="@color/colorPrimary"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

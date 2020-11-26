@@ -1,6 +1,6 @@
 package com.developer.smmmousavi.balefilm.repository;
 
-import com.developer.smmmousavi.balefilm.ui.fragments.home.FilteredMoviesClient;
+import com.developer.smmmousavi.balefilm.network.clients.FilteredMoviesClient;
 import com.developer.smmmousavi.balefilm.model.Movie;
 
 import java.util.List;
@@ -34,9 +34,6 @@ public class MovieRepository {
 
     public void requestFilteredMovies(String genreId, String sortBy, int releaseYear, int page) {
         mClient.requestFilteredMoviesApi(genreId, sortBy, releaseYear, page);
-    }
-
-    public void searchMovies(String query, int page, String sortBy) {
     }
 
 }

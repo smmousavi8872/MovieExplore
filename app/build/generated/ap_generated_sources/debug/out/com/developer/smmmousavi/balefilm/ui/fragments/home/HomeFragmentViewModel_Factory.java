@@ -2,6 +2,7 @@
 package com.developer.smmmousavi.balefilm.ui.fragments.home;
 
 import android.app.Application;
+import com.developer.smmmousavi.balefilm.repository.GenreRepository;
 import com.developer.smmmousavi.balefilm.repository.MovieRepository;
 import dagger.internal.Factory;
 import javax.inject.Provider;
@@ -9,24 +10,35 @@ import javax.inject.Provider;
 public final class HomeFragmentViewModel_Factory implements Factory<HomeFragmentViewModel> {
   private final Provider<Application> applicationProvider;
 
-  private final Provider<MovieRepository> mRepositoryProvider;
+  private final Provider<MovieRepository> mMovieRepositoryProvider;
+
+  private final Provider<GenreRepository> mGenreRepositoryProvider;
 
   public HomeFragmentViewModel_Factory(
-      Provider<Application> applicationProvider, Provider<MovieRepository> mRepositoryProvider) {
+      Provider<Application> applicationProvider,
+      Provider<MovieRepository> mMovieRepositoryProvider,
+      Provider<GenreRepository> mGenreRepositoryProvider) {
     this.applicationProvider = applicationProvider;
-    this.mRepositoryProvider = mRepositoryProvider;
+    this.mMovieRepositoryProvider = mMovieRepositoryProvider;
+    this.mGenreRepositoryProvider = mGenreRepositoryProvider;
   }
 
   @Override
   public HomeFragmentViewModel get() {
     HomeFragmentViewModel instance = new HomeFragmentViewModel(applicationProvider.get());
-    HomeFragmentViewModel_MembersInjector.injectMRepository(instance, mRepositoryProvider.get());
+    HomeFragmentViewModel_MembersInjector.injectMMovieRepository(
+        instance, mMovieRepositoryProvider.get());
+    HomeFragmentViewModel_MembersInjector.injectMGenreRepository(
+        instance, mGenreRepositoryProvider.get());
     return instance;
   }
 
   public static HomeFragmentViewModel_Factory create(
-      Provider<Application> applicationProvider, Provider<MovieRepository> mRepositoryProvider) {
-    return new HomeFragmentViewModel_Factory(applicationProvider, mRepositoryProvider);
+      Provider<Application> applicationProvider,
+      Provider<MovieRepository> mMovieRepositoryProvider,
+      Provider<GenreRepository> mGenreRepositoryProvider) {
+    return new HomeFragmentViewModel_Factory(
+        applicationProvider, mMovieRepositoryProvider, mGenreRepositoryProvider);
   }
 
   public static HomeFragmentViewModel newInstance(Application application) {

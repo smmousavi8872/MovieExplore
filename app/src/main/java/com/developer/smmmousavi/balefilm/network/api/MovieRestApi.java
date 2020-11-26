@@ -1,5 +1,6 @@
 package com.developer.smmmousavi.balefilm.network.api;
 
+import com.developer.smmmousavi.balefilm.network.responses.GenreResponse;
 import com.developer.smmmousavi.balefilm.network.responses.MovieResponse;
 
 import retrofit2.Call;
@@ -23,5 +24,10 @@ public interface MovieRestApi {
         @Query("query") String query,
         @Query("page") int page,
         @Query("sort_by") String sortBy
+    );
+
+    @GET("genre/movie/list")
+    Call<GenreResponse> getGenres(
+        @Query("api_key") String apiKey
     );
 }

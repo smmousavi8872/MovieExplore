@@ -10,6 +10,7 @@ import android.content.ContentProvider;
 import androidx.lifecycle.ViewModel;
 import com.developer.smmmousavi.balefilm.application.BaseApplication;
 import com.developer.smmmousavi.balefilm.factory.viewmodel.ViewModelProviderFactory;
+import com.developer.smmmousavi.balefilm.repository.GenreRepository;
 import com.developer.smmmousavi.balefilm.repository.MovieRepository;
 import com.developer.smmmousavi.balefilm.ui.activities.base.ActivityBuildersModule_ContributeBaseDaggerCompatActivity;
 import com.developer.smmmousavi.balefilm.ui.activities.base.ActivityBuildersModule_ContributeBaseDrawerActivity;
@@ -29,7 +30,9 @@ import com.developer.smmmousavi.balefilm.ui.fragments.home.HomeFragmentViewModel
 import com.developer.smmmousavi.balefilm.ui.fragments.home.HomeFragmentViewModel_Factory;
 import com.developer.smmmousavi.balefilm.ui.fragments.home.HomeFragment_MembersInjector;
 import com.developer.smmmousavi.balefilm.ui.fragments.home.di.HomeFragmentModule;
+import com.developer.smmmousavi.balefilm.ui.fragments.home.di.HomeFragmentModule_ProvideGenreRepositoryFactory;
 import com.developer.smmmousavi.balefilm.ui.fragments.home.di.HomeFragmentModule_ProvideMovieRepositoryFactory;
+import com.developer.smmmousavi.balefilm.ui.fragments.home.di.HomeFragmentModule_ProvideRecyclerViewHelperFactory;
 import com.developer.smmmousavi.balefilm.ui.fragments.search.SearchFragment;
 import com.developer.smmmousavi.balefilm.ui.fragments.setting.SettingFragment;
 import dagger.android.AndroidInjector;
@@ -465,13 +468,17 @@ public final class DaggerApplicationComponent implements ApplicationComponent {
 
   private final class HomeFragmentSubcomponentImpl
       implements FragmentsBuilderModule_ContributeHomeDaggerFragment.HomeFragmentSubcomponent {
+    private final HomeFragmentModule homeFragmentModule;
+
     private Provider<MovieRepository> provideMovieRepositoryProvider;
+
+    private Provider<GenreRepository> provideGenreRepositoryProvider;
 
     private Provider<HomeFragmentViewModel> homeFragmentViewModelProvider;
 
     private HomeFragmentSubcomponentImpl(
         HomeFragmentModule homeFragmentModuleParam, HomeFragment arg0) {
-
+      this.homeFragmentModule = homeFragmentModuleParam;
       initialize(homeFragmentModuleParam, arg0);
     }
 
@@ -497,9 +504,13 @@ public final class DaggerApplicationComponent implements ApplicationComponent {
         final HomeFragmentModule homeFragmentModuleParam, final HomeFragment arg0) {
       this.provideMovieRepositoryProvider =
           HomeFragmentModule_ProvideMovieRepositoryFactory.create(homeFragmentModuleParam);
+      this.provideGenreRepositoryProvider =
+          HomeFragmentModule_ProvideGenreRepositoryFactory.create(homeFragmentModuleParam);
       this.homeFragmentViewModelProvider =
           HomeFragmentViewModel_Factory.create(
-              DaggerApplicationComponent.this.applicationProvider, provideMovieRepositoryProvider);
+              DaggerApplicationComponent.this.applicationProvider,
+              provideMovieRepositoryProvider,
+              provideGenreRepositoryProvider);
     }
 
     @Override
@@ -511,6 +522,10 @@ public final class DaggerApplicationComponent implements ApplicationComponent {
       DaggerFragment_MembersInjector.injectChildFragmentInjector(
           instance, getDispatchingAndroidInjectorOfFragment());
       HomeFragment_MembersInjector.injectMProviderFactory(instance, getViewModelProviderFactory());
+      HomeFragment_MembersInjector.injectMRvHelper(
+          instance,
+          HomeFragmentModule_ProvideRecyclerViewHelperFactory.provideRecyclerViewHelper(
+              homeFragmentModule));
       return instance;
     }
   }

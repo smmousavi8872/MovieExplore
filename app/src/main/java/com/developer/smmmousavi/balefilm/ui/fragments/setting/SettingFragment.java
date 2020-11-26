@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import com.developer.smmmousavi.balefilm.R;
 import com.developer.smmmousavi.balefilm.ui.fragments.base.BaseDaggerFragment;
 
+import butterknife.ButterKnife;
+
 public class SettingFragment extends BaseDaggerFragment {
 
     public static final String TAG = "SettingFragmentTag";
@@ -35,6 +37,7 @@ public class SettingFragment extends BaseDaggerFragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v =  inflater.inflate(R.layout.fragment_settting, container, false);
+        ButterKnife.bind(this, v);
         return v;
 
     }

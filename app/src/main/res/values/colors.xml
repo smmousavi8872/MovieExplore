@@ -5,7 +5,8 @@
   <color name="colorAccent">#03DAC5</color>
   <color name="pureBlack">#000</color>
   <color name="pureWhite">#fff</color>
-  <color name="blackTransparent">#88000000</color>
+  <color name="blackHighTransparent">#88000000</color>
+  <color name="blackLowTransparent">#DD000000</color>
   <color name="colorDarkGrey">#aaaaaa</color>
 
 </resources>
