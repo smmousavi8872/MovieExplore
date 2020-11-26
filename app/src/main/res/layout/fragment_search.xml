@@ -1,36 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  android:orientation="vertical"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
   android:background="@color/pureBlack"
+  android:orientation="vertical"
   tools:context=".ui.fragments.search.SearchFragment">
 
+
+  <androidx.recyclerview.widget.RecyclerView
+    android:layout_below="@id/inputSearchMovie"
+    android:id="@+id/searchMoviesRv"
+    android:layout_marginTop="16dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"/>
+
   <com.google.android.material.textfield.TextInputLayout
-    android:id="@+id/inpSignInUserEmailContainer"
+    android:id="@+id/inputSearchMovie"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="16dp"
     android:hint="@string/text_search_movie_hint">
 
     <com.google.android.material.textfield.TextInputEditText
-      android:id="@+id/edtSignInUserEmail"
+      android:id="@+id/edtSearchMovie"
       android:layout_width="match_parent"
       android:layout_height="64dp"
       android:layout_marginStart="32dp"
-      android:drawableEnd="@drawable/ic_search_24"
       android:layout_marginEnd="32dp"
+      android:drawableEnd="@drawable/ic_search_24"
       android:inputType="text"
       android:paddingTop="16dp"
       android:textSize="17dp" />
+
   </com.google.android.material.textfield.TextInputLayout>
 
-  <androidx.recyclerview.widget.RecyclerView
-    android:layout_margin="8dp"
-    android:id="@+id/searchMoviesRv"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"/>
+  <ProgressBar
+    android:visibility="gone"
+    android:layout_alignTop="@id/inputSearchMovie"
+    android:layout_alignBottom="@id/inputSearchMovie"
+    android:id="@+id/prgLoadingSearch"
+    android:layout_width="24dp"
+    android:layout_height="24dp"
+    android:layout_marginEnd="81dp"
+    android:layout_alignEnd="@id/inputSearchMovie"
+    android:indeterminateTint="@color/colorPrimary" />
 
-</LinearLayout>
+</RelativeLayout>

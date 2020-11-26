@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:layout_width="match_parent"
+  android:layout_marginTop="4dp"
+  android:layout_marginBottom="4dp"
+  android:layout_height="wrap_content"
+  android:orientation="horizontal">
+
+  <androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="64dp"
+    android:layout_height="wrap_content">
+  <androidx.appcompat.widget.AppCompatImageView
+    android:id="@+id/imgMovieCover"
+    android:layout_width="0dp"
+    android:layout_height="0dp"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintDimensionRatio="W,1:1"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent" />
+  </androidx.constraintlayout.widget.ConstraintLayout>
+
+  <LinearLayout
+    android:layout_marginStart="8dp"
+    android:layout_marginEnd="8dp"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.appcompat.widget.AppCompatTextView
+    android:layout_marginStart="8dp"
+      android:id="@+id/txtMovieTitle"
+      android:gravity="center_vertical"
+      android:padding="4dp"
+      android:textSize="16dp"
+      android:textColor="@color/pureWhite"
+      android:text="This is a subtitle for title, 2015"
+      android:ellipsize="end"
+      app:fontFamily="sans-serif-medium"
+      android:maxLines="1"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+    android:layout_marginStart="8dp"
+      android:id="@+id/txtMovieOverview"
+      android:gravity="center_vertical"
+      android:paddingBottom="13dp"
+      android:paddingStart="4dp"
+      android:paddingEnd="4dp"
+      android:textSize="14dp"
+      android:textColor="@color/colorDarkGrey"
+      android:text="This is a subtitle for title"
+      android:ellipsize="end"
+      android:maxLines="1"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"/>
+
+    <View
+      android:background="@color/colorPrimary"
+      android:layout_width="match_parent"
+      android:layout_height="0.5dp"/>
+
+  </LinearLayout>
+
+</LinearLayout>

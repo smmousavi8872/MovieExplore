@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
@@ -47,11 +47,18 @@
 
   </LinearLayout>
 
+  <ProgressBar
+    android:id="@+id/prgLoadingMain"
+    android:layout_width="64dp"
+    android:layout_height="64dp"
+    android:layout_centerInParent="true"
+    android:indeterminateTint="@color/colorPrimary" />
+
   <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
     android:id="@+id/swpRefresh"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    app:layout_constraintTop_toBottomOf="@id/llSpinnerContainer">
+    android:layout_height="match_parent"
+    android:layout_below="@id/llSpinnerContainer">
 
     <androidx.recyclerview.widget.RecyclerView
       android:id="@+id/mainMoviesRv"
@@ -62,14 +69,4 @@
 
   </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-  <ProgressBar
-    android:id="@+id/prgLoadingMain"
-    android:layout_width="64dp"
-    android:layout_height="64dp"
-    android:indeterminateTint="@color/colorPrimary"
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</RelativeLayout>

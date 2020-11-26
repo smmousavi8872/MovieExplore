@@ -7,13 +7,13 @@ import java.util.List;
 
 import androidx.lifecycle.MutableLiveData;
 
-public class MovieRepository {
+public class FilteredMovieRepository {
     public static final String TAG = "MovieRepositoryTag";
 
-    private static MovieRepository sInstance;
+    private static FilteredMovieRepository sInstance;
     private final FilteredMoviesClient mClient;
 
-    private MovieRepository() {
+    private FilteredMovieRepository() {
         mClient = FilteredMoviesClient.getInstance();
     }
 
@@ -24,9 +24,9 @@ public class MovieRepository {
         return mClient.getFilteredMoviesFailureLd();
     }
 
-    public static MovieRepository getInstance() {
+    public static FilteredMovieRepository getInstance() {
         if (sInstance == null) {
-            sInstance = new MovieRepository();
+            sInstance = new FilteredMovieRepository();
             return sInstance;
         }
         return sInstance;
@@ -35,5 +35,4 @@ public class MovieRepository {
     public void requestFilteredMovies(String genreId, String sortBy, int releaseYear, int page) {
         mClient.requestFilteredMoviesApi(genreId, sortBy, releaseYear, page);
     }
-
 }

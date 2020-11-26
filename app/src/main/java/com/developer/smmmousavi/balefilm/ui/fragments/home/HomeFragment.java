@@ -58,6 +58,7 @@ public class HomeFragment extends BaseDaggerFragment implements OnRvItemClickLis
     private int mYear;
     private int mPage;
     private boolean mDidScroll;
+    private boolean mChange;
 
     @Inject
     ViewModelProviderFactory mProviderFactory;
@@ -78,8 +79,8 @@ public class HomeFragment extends BaseDaggerFragment implements OnRvItemClickLis
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-        }
+
+        initViewModel();
     }
 
     @Override
@@ -88,8 +89,6 @@ public class HomeFragment extends BaseDaggerFragment implements OnRvItemClickLis
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_home, container, false);
         ButterKnife.bind(this, v);
-
-        initViewModel();
 
         setListeners();
 
@@ -108,6 +107,7 @@ public class HomeFragment extends BaseDaggerFragment implements OnRvItemClickLis
         mViewModel.requestGenres();
         mViewModel.getGenresLd().observe(this, genres -> {
             //onChange()
+            Log.d(TAG, "subscribeRvObserver:  spinner onchange!");
             initSpinners(genres);
 
             initValues();
@@ -117,16 +117,21 @@ public class HomeFragment extends BaseDaggerFragment implements OnRvItemClickLis
     }
 
     private void subscribeRvObserver() {
-        mPrgLoading.setVisibility(View.VISIBLE);
         mViewModel.requestFilteredMovies(String.valueOf(mGenre.getId()), mSortBy.getValue(), mYear, mPage);
+        mViewModel.getFilteredMoviesLd().removeObservers(this);
         mViewModel.getFilteredMoviesLd().observe(this, movies -> {
             //onChange()
-            if (mRefreshLayout.isRefreshing())
-                mRefreshLayout.setRefreshing(false);
-            setRvAdapterList(movies);
-            mPrgLoading.setVisibility(View.GONE);
-            mDidScroll = false;
+            if (!mChange) {
+                Log.d(TAG, "subscribeRvObserver:  Rv onchange!");
+                if (mRefreshLayout.isRefreshing())
+                    mRefreshLayout.setRefreshing(false);
+                setRvAdapterList(movies);
+                mDidScroll = false;
+                mChange = true;
+                mPrgLoading.setVisibility(View.GONE);
+            }
         });
+        mChange = false;
     }
 
     private void initSpinners(List<Genre> genres) {
@@ -160,6 +165,7 @@ public class HomeFragment extends BaseDaggerFragment implements OnRvItemClickLis
 
     private void setListeners() {
         mRefreshLayout.setOnRefreshListener(() -> {
+            resetRv();
             subscribeRvObserver();
         });
 
@@ -168,13 +174,12 @@ public class HomeFragment extends BaseDaggerFragment implements OnRvItemClickLis
             public void onItemSelected(AdapterView<?> arg0, View arg1,
                                        int arg2, long arg3) {
                 mGenre = (Genre) mGenresSpinner.getSelectedItem();
-                mMainMovieRv.scrollToPosition(0);
+                resetRv();
                 subscribeRvObserver();
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> arg0) {
-                // TODO Auto-generated method stub
             }
         });
 
@@ -183,13 +188,12 @@ public class HomeFragment extends BaseDaggerFragment implements OnRvItemClickLis
             public void onItemSelected(AdapterView<?> arg0, View arg1,
                                        int arg2, long arg3) {
                 mSortBy = (Sort) mSortBySpinner.getSelectedItem();
-                mMainMovieRv.scrollToPosition(0);
+                resetRv();
                 subscribeRvObserver();
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> arg0) {
-                // TODO Auto-generated method stub
             }
         });
 
@@ -198,13 +202,12 @@ public class HomeFragment extends BaseDaggerFragment implements OnRvItemClickLis
             public void onItemSelected(AdapterView<?> arg0, View arg1,
                                        int arg2, long arg3) {
                 mYear = (int) mYearSpinner.getSelectedItem();
-                mMainMovieRv.scrollToPosition(0);
+                resetRv();
                 subscribeRvObserver();
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> arg0) {
-                // TODO Auto-generated method stub
             }
         });
         mMainMovieRv.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -214,13 +217,24 @@ public class HomeFragment extends BaseDaggerFragment implements OnRvItemClickLis
                     mDidScroll = true;
                     mPage++;
                     subscribeRvObserver();
+                    Log.d(TAG, "onScrollStateChanged: next page = " + mPage);
                 }
             }
         });
     }
 
+    private void resetRv() {
+        mPage = 1;
+        mMainMoviesRvAdapter.clear();
+        mPrgLoading.setVisibility(View.VISIBLE);
+    }
+
+    public void smoothScrollTop() {
+        mMainMovieRv.smoothScrollToPosition(0);
+    }
+
     @Override
-    public void onItemClick(int position, View view) {
+    public void onRvItemClick(int position, View view) {
         Log.d(TAG, "onItemClick: position item: " + position);
     }
 }

@@ -2,6 +2,8 @@
 package com.developer.smmmousavi.balefilm.ui.fragments.search;
 
 import androidx.fragment.app.Fragment;
+import com.developer.smmmousavi.balefilm.factory.viewmodel.ViewModelProviderFactory;
+import com.developer.smmmousavi.balefilm.helper.RecyclerViewHelper;
 import dagger.MembersInjector;
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.support.DaggerFragment_MembersInjector;
@@ -10,19 +12,41 @@ import javax.inject.Provider;
 public final class SearchFragment_MembersInjector implements MembersInjector<SearchFragment> {
   private final Provider<DispatchingAndroidInjector<Fragment>> childFragmentInjectorProvider;
 
+  private final Provider<ViewModelProviderFactory> mProviderFactoryProvider;
+
+  private final Provider<RecyclerViewHelper> mRvHelperProvider;
+
   public SearchFragment_MembersInjector(
-      Provider<DispatchingAndroidInjector<Fragment>> childFragmentInjectorProvider) {
+      Provider<DispatchingAndroidInjector<Fragment>> childFragmentInjectorProvider,
+      Provider<ViewModelProviderFactory> mProviderFactoryProvider,
+      Provider<RecyclerViewHelper> mRvHelperProvider) {
     this.childFragmentInjectorProvider = childFragmentInjectorProvider;
+    this.mProviderFactoryProvider = mProviderFactoryProvider;
+    this.mRvHelperProvider = mRvHelperProvider;
   }
 
   public static MembersInjector<SearchFragment> create(
-      Provider<DispatchingAndroidInjector<Fragment>> childFragmentInjectorProvider) {
-    return new SearchFragment_MembersInjector(childFragmentInjectorProvider);
+      Provider<DispatchingAndroidInjector<Fragment>> childFragmentInjectorProvider,
+      Provider<ViewModelProviderFactory> mProviderFactoryProvider,
+      Provider<RecyclerViewHelper> mRvHelperProvider) {
+    return new SearchFragment_MembersInjector(
+        childFragmentInjectorProvider, mProviderFactoryProvider, mRvHelperProvider);
   }
 
   @Override
   public void injectMembers(SearchFragment instance) {
     DaggerFragment_MembersInjector.injectChildFragmentInjector(
         instance, childFragmentInjectorProvider.get());
+    injectMProviderFactory(instance, mProviderFactoryProvider.get());
+    injectMRvHelper(instance, mRvHelperProvider.get());
+  }
+
+  public static void injectMProviderFactory(
+      SearchFragment instance, ViewModelProviderFactory mProviderFactory) {
+    instance.mProviderFactory = mProviderFactory;
+  }
+
+  public static void injectMRvHelper(SearchFragment instance, RecyclerViewHelper mRvHelper) {
+    instance.mRvHelper = mRvHelper;
   }
 }

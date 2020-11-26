@@ -10,8 +10,9 @@ import android.content.ContentProvider;
 import androidx.lifecycle.ViewModel;
 import com.developer.smmmousavi.balefilm.application.BaseApplication;
 import com.developer.smmmousavi.balefilm.factory.viewmodel.ViewModelProviderFactory;
+import com.developer.smmmousavi.balefilm.repository.FilteredMovieRepository;
 import com.developer.smmmousavi.balefilm.repository.GenreRepository;
-import com.developer.smmmousavi.balefilm.repository.MovieRepository;
+import com.developer.smmmousavi.balefilm.repository.SearchMovieRepository;
 import com.developer.smmmousavi.balefilm.ui.activities.base.ActivityBuildersModule_ContributeBaseDaggerCompatActivity;
 import com.developer.smmmousavi.balefilm.ui.activities.base.ActivityBuildersModule_ContributeBaseDrawerActivity;
 import com.developer.smmmousavi.balefilm.ui.activities.base.ActivityBuildersModule_ContributeMainActivity;
@@ -34,6 +35,12 @@ import com.developer.smmmousavi.balefilm.ui.fragments.home.di.HomeFragmentModule
 import com.developer.smmmousavi.balefilm.ui.fragments.home.di.HomeFragmentModule_ProvideMovieRepositoryFactory;
 import com.developer.smmmousavi.balefilm.ui.fragments.home.di.HomeFragmentModule_ProvideRecyclerViewHelperFactory;
 import com.developer.smmmousavi.balefilm.ui.fragments.search.SearchFragment;
+import com.developer.smmmousavi.balefilm.ui.fragments.search.SearchFragmentViewModel;
+import com.developer.smmmousavi.balefilm.ui.fragments.search.SearchFragmentViewModel_Factory;
+import com.developer.smmmousavi.balefilm.ui.fragments.search.SearchFragment_MembersInjector;
+import com.developer.smmmousavi.balefilm.ui.fragments.search.di.SearchFragmentModule;
+import com.developer.smmmousavi.balefilm.ui.fragments.search.di.SearchFragmentModule_ProvideRecyclerViewHelperFactory;
+import com.developer.smmmousavi.balefilm.ui.fragments.search.di.SearchFragmentModule_ProvideSearchMovieRepositoryFactory;
 import com.developer.smmmousavi.balefilm.ui.fragments.setting.SettingFragment;
 import dagger.android.AndroidInjector;
 import dagger.android.DaggerApplication_MembersInjector;
@@ -470,7 +477,7 @@ public final class DaggerApplicationComponent implements ApplicationComponent {
       implements FragmentsBuilderModule_ContributeHomeDaggerFragment.HomeFragmentSubcomponent {
     private final HomeFragmentModule homeFragmentModule;
 
-    private Provider<MovieRepository> provideMovieRepositoryProvider;
+    private Provider<FilteredMovieRepository> provideMovieRepositoryProvider;
 
     private Provider<GenreRepository> provideGenreRepositoryProvider;
 
@@ -537,19 +544,51 @@ public final class DaggerApplicationComponent implements ApplicationComponent {
     public FragmentsBuilderModule_ContributeSearchFragment.SearchFragmentSubcomponent create(
         SearchFragment arg0) {
       Preconditions.checkNotNull(arg0);
-      return new SearchFragmentSubcomponentImpl(arg0);
+      return new SearchFragmentSubcomponentImpl(new SearchFragmentModule(), arg0);
     }
   }
 
   private final class SearchFragmentSubcomponentImpl
       implements FragmentsBuilderModule_ContributeSearchFragment.SearchFragmentSubcomponent {
-    private SearchFragmentSubcomponentImpl(SearchFragment arg0) {}
+    private final SearchFragmentModule searchFragmentModule;
+
+    private Provider<SearchMovieRepository> provideSearchMovieRepositoryProvider;
+
+    private Provider<SearchFragmentViewModel> searchFragmentViewModelProvider;
+
+    private SearchFragmentSubcomponentImpl(
+        SearchFragmentModule searchFragmentModuleParam, SearchFragment arg0) {
+      this.searchFragmentModule = searchFragmentModuleParam;
+      initialize(searchFragmentModuleParam, arg0);
+    }
 
     private DispatchingAndroidInjector<androidx.fragment.app.Fragment>
         getDispatchingAndroidInjectorOfFragment() {
       return DispatchingAndroidInjector_Factory.newInstance(
           DaggerApplicationComponent.this.getMapOfClassOfAndProviderOfAndroidInjectorFactoryOf(),
           Collections.<String, Provider<AndroidInjector.Factory<?>>>emptyMap());
+    }
+
+    private Map<Class<? extends ViewModel>, Provider<ViewModel>>
+        getMapOfClassOfAndProviderOfViewModel() {
+      return Collections.<Class<? extends ViewModel>, Provider<ViewModel>>singletonMap(
+          SearchFragmentViewModel.class, (Provider) searchFragmentViewModelProvider);
+    }
+
+    private ViewModelProviderFactory getViewModelProviderFactory() {
+      return new ViewModelProviderFactory(getMapOfClassOfAndProviderOfViewModel());
+    }
+
+    @SuppressWarnings("unchecked")
+    private void initialize(
+        final SearchFragmentModule searchFragmentModuleParam, final SearchFragment arg0) {
+      this.provideSearchMovieRepositoryProvider =
+          SearchFragmentModule_ProvideSearchMovieRepositoryFactory.create(
+              searchFragmentModuleParam);
+      this.searchFragmentViewModelProvider =
+          SearchFragmentViewModel_Factory.create(
+              DaggerApplicationComponent.this.applicationProvider,
+              provideSearchMovieRepositoryProvider);
     }
 
     @Override
@@ -560,6 +599,12 @@ public final class DaggerApplicationComponent implements ApplicationComponent {
     private SearchFragment injectSearchFragment(SearchFragment instance) {
       DaggerFragment_MembersInjector.injectChildFragmentInjector(
           instance, getDispatchingAndroidInjectorOfFragment());
+      SearchFragment_MembersInjector.injectMProviderFactory(
+          instance, getViewModelProviderFactory());
+      SearchFragment_MembersInjector.injectMRvHelper(
+          instance,
+          SearchFragmentModule_ProvideRecyclerViewHelperFactory.provideRecyclerViewHelper(
+              searchFragmentModule));
       return instance;
     }
   }

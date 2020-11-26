@@ -2,21 +2,21 @@
 package com.developer.smmmousavi.balefilm.ui.fragments.home;
 
 import android.app.Application;
+import com.developer.smmmousavi.balefilm.repository.FilteredMovieRepository;
 import com.developer.smmmousavi.balefilm.repository.GenreRepository;
-import com.developer.smmmousavi.balefilm.repository.MovieRepository;
 import dagger.internal.Factory;
 import javax.inject.Provider;
 
 public final class HomeFragmentViewModel_Factory implements Factory<HomeFragmentViewModel> {
   private final Provider<Application> applicationProvider;
 
-  private final Provider<MovieRepository> mMovieRepositoryProvider;
+  private final Provider<FilteredMovieRepository> mMovieRepositoryProvider;
 
   private final Provider<GenreRepository> mGenreRepositoryProvider;
 
   public HomeFragmentViewModel_Factory(
       Provider<Application> applicationProvider,
-      Provider<MovieRepository> mMovieRepositoryProvider,
+      Provider<FilteredMovieRepository> mMovieRepositoryProvider,
       Provider<GenreRepository> mGenreRepositoryProvider) {
     this.applicationProvider = applicationProvider;
     this.mMovieRepositoryProvider = mMovieRepositoryProvider;
@@ -35,7 +35,7 @@ public final class HomeFragmentViewModel_Factory implements Factory<HomeFragment
 
   public static HomeFragmentViewModel_Factory create(
       Provider<Application> applicationProvider,
-      Provider<MovieRepository> mMovieRepositoryProvider,
+      Provider<FilteredMovieRepository> mMovieRepositoryProvider,
       Provider<GenreRepository> mGenreRepositoryProvider) {
     return new HomeFragmentViewModel_Factory(
         applicationProvider, mMovieRepositoryProvider, mGenreRepositoryProvider);

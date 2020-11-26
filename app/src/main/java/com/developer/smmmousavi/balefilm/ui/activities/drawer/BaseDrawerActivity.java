@@ -129,6 +129,9 @@ public abstract class BaseDrawerActivity extends BaseDaggerCompatActivity
                             R.anim.activity_right_to_left,
                             R.anim.activity_right_to_left2,
                             false);
+                    } else {
+                        HomeFragment fragment = (HomeFragment) getSupportFragmentManager().findFragmentByTag(HomeFragment.TAG);
+                        fragment.smoothScrollTop();
                     }
                     break;
                 case R.id.navbarSearch:
@@ -150,6 +153,9 @@ public abstract class BaseDrawerActivity extends BaseDaggerCompatActivity
                                 R.anim.activity_right_to_left2,
                                 false);
                         }
+                    } else {
+                        SearchFragment fragment = (SearchFragment) getSupportFragmentManager().findFragmentByTag(SearchFragment.TAG);
+                        fragment.smoothScrollTop();
                     }
                     break;
                 case R.id.navbarSetting:

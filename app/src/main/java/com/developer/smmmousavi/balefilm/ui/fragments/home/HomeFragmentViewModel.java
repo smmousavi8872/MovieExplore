@@ -5,8 +5,8 @@ import android.app.Application;
 import com.developer.smmmousavi.balefilm.base.BaseViewModel;
 import com.developer.smmmousavi.balefilm.model.Genre;
 import com.developer.smmmousavi.balefilm.model.Movie;
+import com.developer.smmmousavi.balefilm.repository.FilteredMovieRepository;
 import com.developer.smmmousavi.balefilm.repository.GenreRepository;
-import com.developer.smmmousavi.balefilm.repository.MovieRepository;
 
 import java.util.List;
 
@@ -29,7 +29,7 @@ public class HomeFragmentViewModel extends BaseViewModel {
     private boolean mIsQueryExhausted;
 
     @Inject
-    MovieRepository mMovieRepository;
+    FilteredMovieRepository mMovieRepository;
     @Inject
     GenreRepository mGenreRepository;
 

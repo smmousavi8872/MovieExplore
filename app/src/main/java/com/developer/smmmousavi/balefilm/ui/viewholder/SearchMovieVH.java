@@ -14,21 +14,25 @@ import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import butterknife.BindView;
 
-public class MainMoviesVH<T extends Movie> extends BaseViewHolder<T> {
+public class SearchMovieVH<T extends Movie> extends BaseViewHolder<T> {
 
     @BindView(R.id.imgMovieCover)
     AppCompatImageView mPoster;
     @BindView(R.id.txtMovieTitle)
     AppCompatTextView mTitle;
+    @BindView(R.id.txtMovieOverview)
+    AppCompatTextView mOverview;
 
-    public MainMoviesVH(@NonNull View itemView, OnRvItemClickListener onItemClick) {
+    public SearchMovieVH(@NonNull View itemView, OnRvItemClickListener onItemClick) {
         super(itemView, onItemClick);
     }
 
     @Override
     public void bind(T item) {
+        String title = item.getTitle() + ", " + item.getReleaseDate();
         String url = Constants.TMDB_IMAGE_URL + item.getPosterPath();
+        mTitle.setText(title);
+        mOverview.setText(item.getOverview());
         GlideHelper.build(R.drawable.ic_film_placeholder, itemView.getContext(), url, mPoster);
-        mTitle.setText(item.getTitle());
     }
 }
