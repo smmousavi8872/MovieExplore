@@ -25,6 +25,7 @@
       android:layout_below="@id/mainToolbar"
       android:id="@+id/mainViewPager"
       android:layout_width="match_parent"
+      android:layout_above="@id/bottomNavView"
       android:layout_height="match_parent" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView

@@ -246,7 +246,7 @@ public abstract class BaseDrawerActivity extends BaseDaggerCompatActivity
     }
 
     public void closeDrawer() {
-        mDrawerLayout.closeDrawer(GravityCompat.END);
+        mDrawerLayout.closeDrawer(GravityCompat.START);
     }
 
     public boolean isDrawerOpen() {

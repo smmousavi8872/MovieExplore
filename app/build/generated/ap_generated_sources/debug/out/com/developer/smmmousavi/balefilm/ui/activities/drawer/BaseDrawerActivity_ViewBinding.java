@@ -20,7 +20,7 @@ import java.lang.Override;
 public class BaseDrawerActivity_ViewBinding implements Unbinder {
   private BaseDrawerActivity target;
 
-  private View view7f080096;
+  private View view7f080098;
 
   @UiThread
   public BaseDrawerActivity_ViewBinding(BaseDrawerActivity target) {
@@ -34,7 +34,7 @@ public class BaseDrawerActivity_ViewBinding implements Unbinder {
     View view;
     view = Utils.findRequiredView(source, R.id.imgNavbarButton, "field 'imgNavbarButton' and method 'setNavBarListener'");
     target.imgNavbarButton = Utils.castView(view, R.id.imgNavbarButton, "field 'imgNavbarButton'", AppCompatImageView.class);
-    view7f080096 = view;
+    view7f080098 = view;
     view.setOnClickListener(new DebouncingOnClickListener() {
       @Override
       public void doClick(View p0) {
@@ -62,7 +62,7 @@ public class BaseDrawerActivity_ViewBinding implements Unbinder {
     target.mBottomNavigationView = null;
     target.mViewPager = null;
 
-    view7f080096.setOnClickListener(null);
-    view7f080096 = null;
+    view7f080098.setOnClickListener(null);
+    view7f080098 = null;
   }
 }

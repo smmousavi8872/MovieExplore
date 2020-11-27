@@ -48,17 +48,11 @@
 
   </LinearLayout>
 
-  <ProgressBar
-    android:id="@+id/prgLoadingMain"
-    android:layout_width="64dp"
-    android:layout_height="64dp"
-    android:layout_centerInParent="true"
-    android:indeterminateTint="@color/colorPrimary" />
-
   <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
     android:id="@+id/swpRefresh"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_above="@id/prgFooterLoading"
     android:layout_below="@id/llSpinnerContainer">
 
     <androidx.recyclerview.widget.RecyclerView
@@ -69,5 +63,23 @@
       app:layout_constraintTop_toTopOf="parent" />
 
   </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+  <ProgressBar
+    android:id="@+id/prgMainLoading"
+    android:layout_width="64dp"
+    android:layout_height="64dp"
+    android:layout_centerInParent="true"
+    android:indeterminateTint="@color/colorPrimary" />
+
+  <ProgressBar
+    android:visibility="gone"
+    android:layout_marginTop="4dp"
+    android:layout_marginBottom="4dp"
+    android:layout_alignParentBottom="true"
+    android:id="@+id/prgFooterLoading"
+    android:layout_width="18dp"
+    android:layout_height="18dp"
+    android:layout_centerInParent="true"
+    android:indeterminateTint="@color/colorPrimary" />
 
 </RelativeLayout>

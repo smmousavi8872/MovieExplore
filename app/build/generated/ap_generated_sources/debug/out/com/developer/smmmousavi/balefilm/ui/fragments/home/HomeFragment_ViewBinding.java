@@ -21,7 +21,8 @@ public class HomeFragment_ViewBinding implements Unbinder {
   public HomeFragment_ViewBinding(HomeFragment target, View source) {
     this.target = target;
 
-    target.mPrgLoading = Utils.findRequiredViewAsType(source, R.id.prgLoadingMain, "field 'mPrgLoading'", ProgressBar.class);
+    target.mPrgMainLoading = Utils.findRequiredViewAsType(source, R.id.prgMainLoading, "field 'mPrgMainLoading'", ProgressBar.class);
+    target.mPrgFooterLoading = Utils.findRequiredViewAsType(source, R.id.prgFooterLoading, "field 'mPrgFooterLoading'", ProgressBar.class);
     target.mRefreshLayout = Utils.findRequiredViewAsType(source, R.id.swpRefresh, "field 'mRefreshLayout'", SwipeRefreshLayout.class);
     target.mMainMovieRv = Utils.findRequiredViewAsType(source, R.id.mainMoviesRv, "field 'mMainMovieRv'", RecyclerView.class);
     target.mGenresSpinner = Utils.findRequiredViewAsType(source, R.id.sprGenre, "field 'mGenresSpinner'", Spinner.class);
@@ -36,7 +37,8 @@ public class HomeFragment_ViewBinding implements Unbinder {
     if (target == null) throw new IllegalStateException("Bindings already cleared.");
     this.target = null;
 
-    target.mPrgLoading = null;
+    target.mPrgMainLoading = null;
+    target.mPrgFooterLoading = null;
     target.mRefreshLayout = null;
     target.mMainMovieRv = null;
     target.mGenresSpinner = null;

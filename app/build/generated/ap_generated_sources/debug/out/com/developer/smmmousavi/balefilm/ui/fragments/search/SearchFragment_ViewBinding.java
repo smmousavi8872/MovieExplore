@@ -20,7 +20,8 @@ public class SearchFragment_ViewBinding implements Unbinder {
   public SearchFragment_ViewBinding(SearchFragment target, View source) {
     this.target = target;
 
-    target.mPrgLoading = Utils.findRequiredViewAsType(source, R.id.prgLoadingSearch, "field 'mPrgLoading'", ProgressBar.class);
+    target.mPrgFooterLoading = Utils.findRequiredViewAsType(source, R.id.prgFooterLoading, "field 'mPrgFooterLoading'", ProgressBar.class);
+    target.mPrgSearchLoading = Utils.findRequiredViewAsType(source, R.id.prgLoadingSearch, "field 'mPrgSearchLoading'", ProgressBar.class);
     target.mEdtSearchMovie = Utils.findRequiredViewAsType(source, R.id.edtSearchMovie, "field 'mEdtSearchMovie'", AppCompatEditText.class);
     target.mSearchMovieRv = Utils.findRequiredViewAsType(source, R.id.searchMoviesRv, "field 'mSearchMovieRv'", RecyclerView.class);
   }
@@ -32,7 +33,8 @@ public class SearchFragment_ViewBinding implements Unbinder {
     if (target == null) throw new IllegalStateException("Bindings already cleared.");
     this.target = null;
 
-    target.mPrgLoading = null;
+    target.mPrgFooterLoading = null;
+    target.mPrgSearchLoading = null;
     target.mEdtSearchMovie = null;
     target.mSearchMovieRv = null;
   }

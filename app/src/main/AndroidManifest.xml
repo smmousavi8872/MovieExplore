@@ -2,7 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:tools="http://schemas.android.com/tools"
   package="com.developer.smmmousavi.balefilm">
+  <uses-permission android:name="android.permission.INTERNET" />
 
+  <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
   <application
     android:name=".application.BaseApplication"
     android:allowBackup="true"
@@ -14,18 +16,26 @@
     android:theme="@style/AppTheme"
     android:usesCleartextTraffic="true"
     tools:targetApi="n">
-    <activity android:name=".ui.activities.detail.DetailActivity"></activity>
+    <activity
+      android:configChanges="orientation"
+      android:name=".ui.activities.detail.DetailActivity">
+
+    </activity>
     <activity android:name=".ui.activities.main.MainActivity">
       <intent-filter>
-        <action android:name="android.intent.action.MAIN" />
+        <action
+          android:configChanges="orientation"
+          android:name="android.intent.action.MAIN" />
 
         <category android:name="android.intent.category.LAUNCHER" />
       </intent-filter>
     </activity>
-    <activity android:name=".ui.activities.base.BaseDaggerCompatActivity" />
-  </application>
-  <uses-permission android:name="android.permission.INTERNET" />
+    <activity
+      android:configChanges="orientation"
+      android:name=".ui.activities.base.BaseDaggerCompatActivity" >
 
-  <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    </activity>
+  </application>
+
 
 </manifest>

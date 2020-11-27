@@ -9,18 +9,11 @@
   tools:context=".ui.fragments.detail.DetailFragment">
 
   <androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/clCoverContainer"
+    android:visibility="gone"
     android:layout_width="match_parent"
     android:layout_marginBottom="8dp"
     android:layout_height="wrap_content">
-
-    <androidx.appcompat.widget.AppCompatImageView
-      app:layout_constraintTop_toTopOf="parent"
-      app:layout_constraintStart_toStartOf="parent"
-      app:srcCompat="@drawable/ic_arrow_24"
-      android:layout_width="wrap_content"
-      android:padding="16dp"
-      android:layout_marginStart="16dp"
-      android:layout_height="wrap_content"/>
 
   <androidx.appcompat.widget.AppCompatImageView
     android:id="@+id/imgMovieCover"
@@ -31,12 +24,25 @@
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent" />
 
+
+    <androidx.appcompat.widget.AppCompatImageView
+      app:layout_constraintTop_toTopOf="parent"
+      android:id="@+id/imgBack"
+      app:layout_constraintStart_toStartOf="parent"
+      app:srcCompat="@drawable/ic_arrow_24"
+      android:layout_width="wrap_content"
+      android:padding="16dp"
+      android:layout_marginStart="8dp"
+      android:layout_height="wrap_content"/>
+
   </androidx.constraintlayout.widget.ConstraintLayout>
+
   <ScrollView
     android:id="@+id/sclMovieContentContainer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
+    android:visibility="gone"
     android:orientation="vertical"
     android:scrollbars="none"
     app:layout_constraintTop_toBottomOf="@id/imgMovieCover">
@@ -192,14 +198,11 @@
   </ScrollView>
 
   <ProgressBar
-    app:layout_constraintTop_toTopOf="parent"
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintEnd_toEndOf="parent"
+    android:visibility="visible"
+    android:layout_gravity="center"
     android:id="@+id/prgLoadingDetail"
     android:layout_width="64dp"
-    android:layout_height="64dp"
-    android:layout_centerInParent="true"
+    android:layout_height="match_parent"
     android:indeterminateTint="@color/colorPrimary" />
 
 </LinearLayout>

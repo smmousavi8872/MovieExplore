@@ -36,8 +36,10 @@ public class SearchFragment extends BaseDaggerFragment implements OnRvItemClickL
 
     public static final String TAG = "SearchFragmentTag";
 
+    @BindView(R.id.prgFooterLoading)
+    ProgressBar mPrgFooterLoading;
     @BindView(R.id.prgLoadingSearch)
-    ProgressBar mPrgLoading;
+    ProgressBar mPrgSearchLoading;
     @BindView(R.id.edtSearchMovie)
     AppCompatEditText mEdtSearchMovie;
     @BindView(R.id.searchMoviesRv)
@@ -47,7 +49,7 @@ public class SearchFragment extends BaseDaggerFragment implements OnRvItemClickL
     private SearchMoviesRvAdapter<Movie> mSearchMoviesRvAdapter;
     private List<Movie> mMovieList;
     private Handler mRequestHandler;
-    private String mQuery;
+    private String mQuery = "";
     private int mPage;
     private boolean mChange;
     private boolean mDidScroll;
@@ -105,7 +107,8 @@ public class SearchFragment extends BaseDaggerFragment implements OnRvItemClickL
                     setRvAdapterList(mMovieList);
                 } else
                     resetRv();
-                mPrgLoading.setVisibility(View.GONE);
+                showSearchLoading(false);
+                showFooterLoading(false);
             }
         });
         mChange = false;
@@ -130,19 +133,21 @@ public class SearchFragment extends BaseDaggerFragment implements OnRvItemClickL
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                mPrgLoading.setVisibility(View.VISIBLE);
+                showSearchLoading(true);
+
                 if (mRequestHandler == null)
                     mRequestHandler = new Handler();
                 Runnable runnable = () -> {
                     mQuery = s.toString();
-                    Log.d(TAG, "onTextChanged: mQuery = " + mQuery);
                     if (!mQuery.isEmpty())
                         subscribeRvObserver();
                     else
                         resetRv();
+                    if (mPage > 1)
+                        resetRv();
                 };
                 stopHandler();
-                mRequestHandler.postDelayed(runnable, 500);
+                mRequestHandler.postDelayed(runnable, 700);
             }
 
             @Override
@@ -156,8 +161,8 @@ public class SearchFragment extends BaseDaggerFragment implements OnRvItemClickL
                 if (!mSearchMovieRv.canScrollVertically(1) && !mDidScroll) {
                     mDidScroll = true;
                     mPage++;
+                    showFooterLoading(true);
                     subscribeRvObserver();
-                    Log.d(TAG, "onScrollStateChanged: next page = " + mPage);
                 }
             }
         });
@@ -169,12 +174,26 @@ public class SearchFragment extends BaseDaggerFragment implements OnRvItemClickL
 
     private void resetRv() {
         mPage = 1;
-        mPrgLoading.setVisibility(View.GONE);
+        showSearchLoading(false);
         mSearchMoviesRvAdapter.clear();
     }
 
     public void smoothScrollTop() {
         mSearchMovieRv.smoothScrollToPosition(0);
+    }
+
+    private void showSearchLoading(boolean show) {
+        if (show)
+            mPrgSearchLoading.setVisibility(View.VISIBLE);
+        else
+            mPrgSearchLoading.setVisibility(View.GONE);
+    }
+
+    private void showFooterLoading(boolean show) {
+        if (show)
+            mPrgFooterLoading.setVisibility(View.VISIBLE);
+        else
+            mPrgFooterLoading.setVisibility(View.GONE);
     }
 
     @Override
@@ -183,5 +202,11 @@ public class SearchFragment extends BaseDaggerFragment implements OnRvItemClickL
         int movieId = mMovieList.get(position).getId();
         Intent intent = DetailActivity.newIntent(getContext(), movieId);
         startActivity(intent);
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        resetRv();
     }
 }

@@ -38,8 +38,10 @@ import butterknife.ButterKnife;
 
 public class HomeFragment extends BaseDaggerFragment implements OnRvItemClickListener {
 
-    @BindView(R.id.prgLoadingMain)
-    ProgressBar mPrgLoading;
+    @BindView(R.id.prgMainLoading)
+    ProgressBar mPrgMainLoading;
+    @BindView(R.id.prgFooterLoading)
+    ProgressBar mPrgFooterLoading;
     @BindView(R.id.swpRefresh)
     SwipeRefreshLayout mRefreshLayout;
     @BindView(R.id.mainMoviesRv)
@@ -132,7 +134,8 @@ public class HomeFragment extends BaseDaggerFragment implements OnRvItemClickLis
                 setRvAdapterList(mMovieList);
                 mDidScroll = false;
                 mChange = true;
-                mPrgLoading.setVisibility(View.GONE);
+                showMainLoading(false);
+                showFooterLoading(false);
             }
         });
         mChange = false;
@@ -221,6 +224,7 @@ public class HomeFragment extends BaseDaggerFragment implements OnRvItemClickLis
                     mDidScroll = true;
                     mPage++;
                     subscribeRvObserver();
+                    showFooterLoading(true);
                     Log.d(TAG, "onScrollStateChanged: next page = " + mPage);
                 }
             }
@@ -230,7 +234,21 @@ public class HomeFragment extends BaseDaggerFragment implements OnRvItemClickLis
     private void resetRv() {
         mPage = 1;
         mMainMoviesRvAdapter.clear();
-        mPrgLoading.setVisibility(View.VISIBLE);
+        showMainLoading(true);
+    }
+
+    private void showFooterLoading(boolean show) {
+        if (show)
+            mPrgFooterLoading.setVisibility(View.VISIBLE);
+        else
+            mPrgFooterLoading.setVisibility(View.GONE);
+    }
+
+    private void showMainLoading(boolean show) {
+        if (show)
+            mPrgMainLoading.setVisibility(View.VISIBLE);
+        else
+            mPrgMainLoading.setVisibility(View.GONE);
     }
 
     public void smoothScrollTop() {
@@ -243,5 +261,11 @@ public class HomeFragment extends BaseDaggerFragment implements OnRvItemClickLis
         int movieId = mMovieList.get(position).getId();
         Intent intent = DetailActivity.newIntent(getContext(), movieId);
         startActivity(intent);
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        resetRv();
     }
 }

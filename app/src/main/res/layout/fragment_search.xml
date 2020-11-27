@@ -15,6 +15,7 @@
     android:id="@+id/searchMoviesRv"
     android:layout_marginTop="16dp"
     android:layout_width="match_parent"
+    android:layout_above="@id/prgFooterLoading"
     android:layout_height="wrap_content"/>
 
   <com.google.android.material.textfield.TextInputLayout
@@ -46,6 +47,16 @@
     android:layout_height="24dp"
     android:layout_marginEnd="81dp"
     android:layout_alignEnd="@id/inputSearchMovie"
+    android:indeterminateTint="@color/colorPrimary" />
+
+  <ProgressBar
+    android:layout_marginTop="4dp"
+    android:layout_marginBottom="4dp"
+    android:layout_alignParentBottom="true"
+    android:id="@+id/prgFooterLoading"
+    android:layout_width="18dp"
+    android:layout_height="18dp"
+    android:layout_centerInParent="true"
     android:indeterminateTint="@color/colorPrimary" />
 
 </RelativeLayout>

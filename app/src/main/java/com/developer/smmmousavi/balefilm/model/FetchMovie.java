@@ -251,34 +251,49 @@ public class FetchMovie extends BaseModel {
     }
 
     public String getYearText() {
-        String year = releaseDate;
-        if (year == null)
-            year = "";
-        else {
-            year = " (" + year.substring(0, year.indexOf("-")) + ")";
+        try {
+            String year = releaseDate;
+            if (year == null)
+                year = "";
+            else {
+                year = " (" + year.substring(0, year.indexOf("-")) + ")";
+            }
+            return year;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "";
         }
-        return year;
     }
 
     public String getGenresText() {
-        String genresTitle = "";
-        for (int i = 0; i < genres.length; i++) {
-            if (i < genres.length - 1)
-                genresTitle = genresTitle.concat(genres[i].getName() + ", ");
-            else
-                genresTitle = genresTitle.concat(genres[i].getName());
+        try {
+            String genresTitle = "";
+            for (int i = 0; i < genres.length; i++) {
+                if (i < genres.length - 1)
+                    genresTitle = genresTitle.concat(genres[i].getName() + ", ");
+                else
+                    genresTitle = genresTitle.concat(genres[i].getName());
+            }
+            return genresTitle;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "";
         }
-        return genresTitle;
     }
 
     public String getCompaniesText() {
-        String genresTitle = "";
-        for (int i = 0; i < productionCompanies.length; i++) {
-            if (i < productionCompanies.length - 1)
-                genresTitle = genresTitle.concat(productionCompanies[i].getName() + ", ");
-            else
-                genresTitle = genresTitle.concat(productionCompanies[i].getName());
+        try {
+            String genresTitle = "";
+            for (int i = 0; i < productionCompanies.length; i++) {
+                if (i < productionCompanies.length - 1)
+                    genresTitle = genresTitle.concat(productionCompanies[i].getName() + ", ");
+                else
+                    genresTitle = genresTitle.concat(productionCompanies[i].getName());
+            }
+            return genresTitle;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "";
         }
-        return genresTitle;
     }
 }

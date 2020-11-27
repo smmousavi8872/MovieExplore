@@ -21,9 +21,11 @@ import javax.inject.Inject;
 
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.ViewModelProviders;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class DetailFragment extends BaseDaggerFragment {
 
@@ -32,6 +34,8 @@ public class DetailFragment extends BaseDaggerFragment {
 
     @BindView(R.id.prgLoadingDetail)
     ProgressBar mPrgLoading;
+    @BindView(R.id.clCoverContainer)
+    ConstraintLayout mCoverContainer;
     @BindView(R.id.sclMovieContentContainer)
     ScrollView mSclMovieContentContainer;
     @BindView(R.id.imgMovieCover)
@@ -110,12 +114,12 @@ public class DetailFragment extends BaseDaggerFragment {
     private void showContent(boolean show) {
         if (show) {
             mSclMovieContentContainer.setVisibility(View.VISIBLE);
-            mImgMovieCover.setVisibility(View.VISIBLE);
+            mCoverContainer.setVisibility(View.VISIBLE);
             mPrgLoading.setVisibility(View.GONE);
         } else {
             mPrgLoading.setVisibility(View.VISIBLE);
             mSclMovieContentContainer.setVisibility(View.GONE);
-            mImgMovieCover.setVisibility(View.GONE);
+            mCoverContainer.setVisibility(View.GONE);
         }
     }
 
@@ -129,5 +133,10 @@ public class DetailFragment extends BaseDaggerFragment {
         mTxtReleaseDate.setText(movie.getReleaseDate());
         mTxtGenresTitle.setText(movie.getGenresText());
         mTxtProductionCompanies.setText(movie.getCompaniesText());
+    }
+
+    @OnClick(R.id.imgBack)
+    void setOnBackClickListener() {
+        Objects.requireNonNull(getActivity()).finish();
     }
 }
