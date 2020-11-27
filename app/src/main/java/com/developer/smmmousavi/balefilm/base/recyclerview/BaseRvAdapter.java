@@ -38,6 +38,8 @@ public abstract class BaseRvAdapter<T> extends RecyclerView.Adapter<RecyclerView
 
     public abstract void addFooter();
 
+    public abstract int createItemViewType(int position);
+
     public enum FooterType {
         LOAD_MORE,
         ERROR
@@ -100,6 +102,11 @@ public abstract class BaseRvAdapter<T> extends RecyclerView.Adapter<RecyclerView
         if (mItemList != null)
             return mItemList.size();
         return 0;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return createItemViewType(position);
     }
 
     public T getItem(int position) {

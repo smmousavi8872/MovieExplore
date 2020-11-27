@@ -10,7 +10,7 @@ import android.view.View;
 
 import com.developer.smmmousavi.balefilm.R;
 import com.developer.smmmousavi.balefilm.ui.activities.base.BaseDaggerCompatActivity;
-import com.developer.smmmousavi.balefilm.ui.adapter.PagerAdapter;
+import com.developer.smmmousavi.balefilm.ui.adapter.MainMoviesPagerAdapter;
 import com.developer.smmmousavi.balefilm.ui.fragments.base.BaseDaggerFragment;
 import com.developer.smmmousavi.balefilm.ui.fragments.home.HomeFragment;
 import com.developer.smmmousavi.balefilm.ui.fragments.search.SearchFragment;
@@ -127,7 +127,7 @@ public abstract class BaseDrawerActivity extends BaseDaggerCompatActivity
     }
 
     private void initViewPager() {
-        PagerAdapter adapter = new PagerAdapter(getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
+        MainMoviesPagerAdapter adapter = new MainMoviesPagerAdapter(getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
         setFragmentList();
         adapter.setFragments(mFragmentList);
         mViewPager.setAdapter(adapter);

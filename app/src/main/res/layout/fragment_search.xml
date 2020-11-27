@@ -34,7 +34,7 @@
       android:drawableEnd="@drawable/ic_search_24"
       android:inputType="text"
       android:paddingTop="16dp"
-      android:textSize="17dp" />
+      android:textSize="17sp" />
 
   </com.google.android.material.textfield.TextInputLayout>
 

@@ -10,7 +10,7 @@
 
   <androidx.constraintlayout.widget.ConstraintLayout
     android:id="@+id/clCoverContainer"
-    android:visibility="gone"
+    android:visibility="visible"
     android:layout_width="match_parent"
     android:layout_marginBottom="8dp"
     android:layout_height="wrap_content">
@@ -42,7 +42,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
-    android:visibility="gone"
+    android:visibility="visible"
     android:orientation="vertical"
     android:scrollbars="none"
     app:layout_constraintTop_toBottomOf="@id/imgMovieCover">
@@ -53,29 +53,78 @@
       android:layout_height="wrap_content"
       android:orientation="vertical">
 
+      <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
       <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/txtMovieTitle"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
+        android:layout_weight=".840"
         android:layout_height="wrap_content"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
         android:paddingTop="16dp"
-        android:paddingBottom="4dp"
         android:text="This is title of Movie (2015)"
         android:textColor="@color/colorPrimary"
-        android:textSize="20dp"
+        android:textSize="20sp"
         app:fontFamily="sans-serif-medium" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+          android:id="@+id/txtVoteAverage"
+          android:layout_width="0dp"
+          android:layout_weight=".090"
+          android:text="10"
+          android:textSize="26sp"
+          android:textColor="@color/colorPrimary"
+          android:gravity="center"
+          app:fontFamily="sans-serif-condensed"
+          android:layout_height="wrap_content"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+          android:gravity="center"
+          android:layout_width="0dp"
+          android:layout_weight="0.070"
+          android:text="/10"
+          android:textSize="17sp"
+          app:fontFamily="sans-serif-condensed"
+          android:textColor="@color/colorDarkGrey"
+          android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+    <LinearLayout
+
+      android:orientation="horizontal"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content">
 
       <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/txtTagline"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_weight="0.840"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
         android:textColor="@color/pureWhite"
         android:text="This is title of Movie (2015)"
-        android:textSize="15dp"
+        android:textSize="15sp"
         app:fontFamily="sans-serif" />
+
+      <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/txtVoteCount"
+        app:fontFamily="sans-serif-condensed"
+        android:textSize="16sp"
+        android:layout_width="0dp"
+        android:gravity="center"
+        android:layout_weight="0.160"
+        android:text="127225"
+        android:layout_gravity="end"
+        android:layout_height="wrap_content"/>
+
+
+    </LinearLayout>
+
 
       <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/txtMovieOverview"
@@ -84,7 +133,7 @@
         android:padding="16dp"
         android:text="These excellant intentions were strengthed when he enterd the Father
          Superior's diniing-room, though, stricttly speakin, it was not a dining-room,"
-        android:textSize="15dp" />
+        android:textSize="15sp" />
 
       <LinearLayout
         android:layout_marginTop="8dp"
@@ -94,7 +143,7 @@
 
       <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/txtGenresTitle"
-        android:textSize="15dp"
+        android:textSize="15sp"
         android:textStyle="bold"
         app:fontFamily="sans-serif-medium"
         android:text="Genres: "
@@ -105,7 +154,7 @@
 
       <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/txtGenres"
-        android:textSize="15dp"
+        android:textSize="15sp"
         app:fontFamily="sans-serif"
         android:text="Action"
         android:layout_width="wrap_content"
@@ -121,7 +170,7 @@
 
       <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/txtMovieDirectorTitle"
-        android:textSize="15dp"
+        android:textSize="15sp"
         android:textStyle="bold"
         app:fontFamily="sans-serif-medium"
         android:text="Director: "
@@ -132,7 +181,7 @@
 
       <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/txtMovieDirector"
-        android:textSize="15dp"
+        android:textSize="15sp"
         app:fontFamily="sans-serif"
         android:text="Christopher Nolan"
         android:layout_width="wrap_content"
@@ -148,7 +197,7 @@
 
       <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/txtReleaseDateTitle"
-        android:textSize="15dp"
+        android:textSize="15sp"
         android:textStyle="bold"
         app:fontFamily="sans-serif-medium"
         android:layout_width="wrap_content"
@@ -159,7 +208,7 @@
 
       <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/txtReleaseDate"
-        android:textSize="15dp"
+        android:textSize="15sp"
         android:text="2019-05-07"
         app:fontFamily="sans-serif"
         android:layout_width="wrap_content"
@@ -175,7 +224,7 @@
 
       <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/txtCompaniesTitle"
-        android:textSize="15dp"
+        android:textSize="15sp"
         android:textStyle="bold"
         app:fontFamily="sans-serif-medium"
         android:layout_width="wrap_content"
@@ -186,7 +235,7 @@
 
       <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/txtCompanies"
-        android:textSize="15dp"
+        android:textSize="15sp"
         android:text="Netflix"
         app:fontFamily="sans-serif"
         android:layout_width="wrap_content"

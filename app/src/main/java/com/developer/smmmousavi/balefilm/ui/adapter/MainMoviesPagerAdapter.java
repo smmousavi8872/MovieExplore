@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
-public class PagerAdapter extends FragmentPagerAdapter {
+public class MainMoviesPagerAdapter extends FragmentPagerAdapter {
 
     List<BaseDaggerFragment> mFragments;
 
@@ -17,7 +17,7 @@ public class PagerAdapter extends FragmentPagerAdapter {
         mFragments = fragments;
     }
 
-    public PagerAdapter(@NonNull FragmentManager fm, int behavior) {
+    public MainMoviesPagerAdapter(@NonNull FragmentManager fm, int behavior) {
         super(fm, behavior);
     }
 

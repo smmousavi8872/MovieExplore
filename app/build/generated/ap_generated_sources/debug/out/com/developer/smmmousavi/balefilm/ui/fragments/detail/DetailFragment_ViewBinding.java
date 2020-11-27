@@ -32,6 +32,8 @@ public class DetailFragment_ViewBinding implements Unbinder {
     target.mImgMovieCover = Utils.findRequiredViewAsType(source, R.id.imgMovieCover, "field 'mImgMovieCover'", AppCompatImageView.class);
     target.mTxtMovieTitle = Utils.findRequiredViewAsType(source, R.id.txtMovieTitle, "field 'mTxtMovieTitle'", AppCompatTextView.class);
     target.mTxtMovieOverview = Utils.findRequiredViewAsType(source, R.id.txtMovieOverview, "field 'mTxtMovieOverview'", AppCompatTextView.class);
+    target.mTxtVoteAverage = Utils.findRequiredViewAsType(source, R.id.txtVoteAverage, "field 'mTxtVoteAverage'", AppCompatTextView.class);
+    target.mTxtVoteCount = Utils.findRequiredViewAsType(source, R.id.txtVoteCount, "field 'mTxtVoteCount'", AppCompatTextView.class);
     target.mTxtTagline = Utils.findRequiredViewAsType(source, R.id.txtTagline, "field 'mTxtTagline'", AppCompatTextView.class);
     target.mTxtReleaseDate = Utils.findRequiredViewAsType(source, R.id.txtReleaseDate, "field 'mTxtReleaseDate'", AppCompatTextView.class);
     target.mTxtGenresTitle = Utils.findRequiredViewAsType(source, R.id.txtGenres, "field 'mTxtGenresTitle'", AppCompatTextView.class);
@@ -60,6 +62,8 @@ public class DetailFragment_ViewBinding implements Unbinder {
     target.mImgMovieCover = null;
     target.mTxtMovieTitle = null;
     target.mTxtMovieOverview = null;
+    target.mTxtVoteAverage = null;
+    target.mTxtVoteCount = null;
     target.mTxtTagline = null;
     target.mTxtReleaseDate = null;
     target.mTxtGenresTitle = null;

@@ -44,6 +44,10 @@ public class DetailFragment extends BaseDaggerFragment {
     AppCompatTextView mTxtMovieTitle;
     @BindView(R.id.txtMovieOverview)
     AppCompatTextView mTxtMovieOverview;
+    @BindView(R.id.txtVoteAverage)
+    AppCompatTextView mTxtVoteAverage;
+    @BindView(R.id.txtVoteCount)
+    AppCompatTextView mTxtVoteCount;
     @BindView(R.id.txtTagline)
     AppCompatTextView mTxtTagline;
     @BindView(R.id.txtReleaseDate)
@@ -95,11 +99,9 @@ public class DetailFragment extends BaseDaggerFragment {
         return v;
     }
 
-
     public void initViewModel() {
         mViewModel = ViewModelProviders.of(this, mProviderFactory).get(DetailFragmentViewModel.class);
     }
-
 
     public void subscribeObservers() {
         mViewModel.requestFetchMovie(mMovieId);
@@ -135,6 +137,8 @@ public class DetailFragment extends BaseDaggerFragment {
         mTxtMovieTitle.setText(title);
         mTxtMovieOverview.setText(movie.getOverview());
         mTxtTagline.setText(movie.getTagline());
+        mTxtVoteAverage.setText(String.valueOf(movie.getVoteAverage()));
+        mTxtVoteCount.setText(String.valueOf(movie.getVoteCount()));
         mTxtReleaseDate.setText(movie.getReleaseDate());
         mTxtGenresTitle.setText(movie.getGenresText());
         mTxtProductionCompanies.setText(movie.getCompaniesText());

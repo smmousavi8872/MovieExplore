@@ -75,7 +75,9 @@ public class MainMoviesRvAdapter<T extends Movie> extends BaseRvAdapter<T> {
     }
 
     @Override
-    public int getItemViewType(int position) {
+    public int createItemViewType(int position) {
         return ITEM;
     }
+
+
 }
