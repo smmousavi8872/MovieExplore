@@ -105,9 +105,14 @@ public class DetailFragment extends BaseDaggerFragment {
         mViewModel.requestFetchMovie(mMovieId);
         mViewModel.getFetchedMovieLd().observe(this, movie -> {
             //onChange()
-            Log.d(TAG, "onChangeDetail: called");
-            setViewContent(movie);
-            showContent(true);
+            if (mMovieId == movie.getId()) {
+                mMovieId = movie.getId();
+                Log.d(TAG, "onChangeDetail: called");
+                setViewContent(movie);
+                showContent(true);
+            } else {
+                showContent(false);
+            }
         });
     }
 
