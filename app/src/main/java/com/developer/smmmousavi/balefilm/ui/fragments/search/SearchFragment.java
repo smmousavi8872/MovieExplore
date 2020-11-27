@@ -46,6 +46,7 @@ public class SearchFragment extends BaseDaggerFragment implements OnRvItemClickL
     private SearchFragmentViewModel mViewModel;
     private SearchMoviesRvAdapter<Movie> mSearchMoviesRvAdapter;
     private List<Movie> mMovieList;
+    private Handler mRequestHandler;
     private String mQuery;
     private int mPage;
     private boolean mChange;
@@ -98,13 +99,13 @@ public class SearchFragment extends BaseDaggerFragment implements OnRvItemClickL
             mMovieList = movies;
             //onChange()
             if (!mChange) {
-                Log.d(TAG, "subscribeRvObserver: onChange!");
-                setRvAdapterList(mMovieList);
                 mDidScroll = false;
                 mChange = true;
-                new Handler().postDelayed(() -> {
-                    mPrgLoading.setVisibility(View.GONE);
-                }, 500);
+                if (mMovieList != null) {
+                    setRvAdapterList(mMovieList);
+                } else
+                    resetRv();
+                mPrgLoading.setVisibility(View.GONE);
             }
         });
         mChange = false;
@@ -125,23 +126,27 @@ public class SearchFragment extends BaseDaggerFragment implements OnRvItemClickL
         mEdtSearchMovie.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                Log.d(TAG, "onTextChanged: text = " + s.toString());
-                mQuery = s.toString();
-                resetRv();
-                if (!(s.toString().equals(""))) {
-                    mPrgLoading.setVisibility(View.VISIBLE);
-                    subscribeRvObserver();
-                }
+                mPrgLoading.setVisibility(View.VISIBLE);
+                if (mRequestHandler == null)
+                    mRequestHandler = new Handler();
+                Runnable runnable = () -> {
+                    mQuery = s.toString();
+                    Log.d(TAG, "onTextChanged: mQuery = " + mQuery);
+                    if (!mQuery.isEmpty())
+                        subscribeRvObserver();
+                    else
+                        resetRv();
+                };
+                stopHandler();
+                mRequestHandler.postDelayed(runnable, 500);
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-
             }
         });
 
@@ -158,8 +163,13 @@ public class SearchFragment extends BaseDaggerFragment implements OnRvItemClickL
         });
     }
 
+    private void stopHandler() {
+        mRequestHandler.removeCallbacksAndMessages(null);
+    }
+
     private void resetRv() {
         mPage = 1;
+        mPrgLoading.setVisibility(View.GONE);
         mSearchMoviesRvAdapter.clear();
     }
 
