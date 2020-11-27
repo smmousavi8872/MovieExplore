@@ -9,7 +9,7 @@ import com.developer.smmmousavi.balefilm.network.responses.GenreResponse;
 
 import java.util.List;
 
-import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.MediatorLiveData;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -19,8 +19,8 @@ public class GenreClient {
     private static final String TAG = "FilteredMoviesClient";
 
     private static GenreClient sInstance;
-    private final MutableLiveData<List<Genre>> mGenresLd;
-    private final MutableLiveData<Boolean> mGenresFailureLd;
+    private final MediatorLiveData<List<Genre>> mGenresLd;
+    private final MediatorLiveData<Boolean> mGenresFailureLd;
 
     public static GenreClient getInstance() {
         if (sInstance == null)
@@ -29,15 +29,15 @@ public class GenreClient {
     }
 
     private GenreClient() {
-        mGenresLd = new MutableLiveData<>();
-        mGenresFailureLd = new MutableLiveData<>();
+        mGenresLd = new MediatorLiveData<>();
+        mGenresFailureLd = new MediatorLiveData<>();
     }
 
-    public MutableLiveData<List<Genre>> getGenresLd() {
+    public MediatorLiveData<List<Genre>> getGenresLd() {
         return mGenresLd;
     }
 
-    public MutableLiveData<Boolean> getGenreFailureLd() {
+    public MediatorLiveData<Boolean> getGenreFailureLd() {
         return mGenresFailureLd;
     }
 

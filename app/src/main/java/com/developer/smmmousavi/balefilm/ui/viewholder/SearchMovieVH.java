@@ -32,7 +32,7 @@ public class SearchMovieVH<T extends Movie> extends BaseViewHolder<T> {
         String title = item.getTitle() + ", " + item.getReleaseDate();
         String url = Constants.TMDB_IMAGE_URL + item.getPosterPath();
         mTitle.setText(title);
-        mOverview.setText(item.getOverview());
+        mOverview.setText(item.getTagline());
         GlideHelper.build(R.drawable.ic_film_placeholder, itemView.getContext(), url, mPoster);
     }
 }

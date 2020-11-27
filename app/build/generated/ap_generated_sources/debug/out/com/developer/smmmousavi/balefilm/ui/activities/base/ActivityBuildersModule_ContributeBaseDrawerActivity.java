@@ -1,6 +1,7 @@
 package com.developer.smmmousavi.balefilm.ui.activities.base;
 
 import com.developer.smmmousavi.balefilm.ui.activities.drawer.BaseDrawerActivity;
+import com.developer.smmmousavi.balefilm.ui.activities.drawer.di.BaseDrawerActivityModule;
 import dagger.Binds;
 import dagger.Module;
 import dagger.Subcomponent;
@@ -21,7 +22,7 @@ public abstract class ActivityBuildersModule_ContributeBaseDrawerActivity {
   abstract AndroidInjector.Factory<?> bindAndroidInjectorFactory(
       BaseDrawerActivitySubcomponent.Factory builder);
 
-  @Subcomponent
+  @Subcomponent(modules = BaseDrawerActivityModule.class)
   public interface BaseDrawerActivitySubcomponent extends AndroidInjector<BaseDrawerActivity> {
     @Subcomponent.Factory
     interface Factory extends AndroidInjector.Factory<BaseDrawerActivity> {}

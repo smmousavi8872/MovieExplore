@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName;
 import java.util.Arrays;
 import java.util.Objects;
 
-public class Movie extends BaseModel {
+public class FetchMovie extends BaseModel {
 
     @SerializedName("id")
     @Expose
@@ -44,9 +44,13 @@ public class Movie extends BaseModel {
     @Expose
     private String originalTitle;
 
-    @SerializedName("genre_ids")
+    @SerializedName("genres")
     @Expose
-    private int[] genreIds;
+    private Genre[] genres;
+
+    @SerializedName("production_companies")
+    @Expose
+    private ProductionCompany[] productionCompanies;
 
     @SerializedName("backdrop_path")
     @Expose
@@ -140,12 +144,20 @@ public class Movie extends BaseModel {
         this.originalTitle = originalTitle;
     }
 
-    public int[] getGenreIds() {
-        return genreIds;
+    public Genre[] getGenres() {
+        return genres;
     }
 
-    public void setGenreIds(int[] genreIds) {
-        this.genreIds = genreIds;
+    public void setGenres(Genre[] genres) {
+        this.genres = genres;
+    }
+
+    public ProductionCompany[] getProductionCompanies() {
+        return productionCompanies;
+    }
+
+    public void setProductionCompanies(ProductionCompany[] productionCompanies) {
+        this.productionCompanies = productionCompanies;
     }
 
     public String getBackdropPath() {
@@ -190,38 +202,36 @@ public class Movie extends BaseModel {
 
     @Override
     public boolean equals(Object o) {
-
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Movie movie = (Movie) o;
-        return id == movie.id &&
-            voteCount == movie.voteCount &&
-            video == movie.video &&
-            Float.compare(movie.voteAverage, voteAverage) == 0 &&
-            Float.compare(movie.popularity, popularity) == 0 &&
-            adult == movie.adult &&
-            Objects.equals(title, movie.title) &&
-            Objects.equals(posterPath, movie.posterPath) &&
-            Objects.equals(originalLanguage, movie.originalLanguage) &&
-            Objects.equals(originalTitle, movie.originalTitle) &&
-            Arrays.equals(genreIds, movie.genreIds) &&
-            Objects.equals(backdropPath, movie.backdropPath) &&
-            Objects.equals(overview, movie.overview) &&
-            Objects.equals(tagline, movie.tagline) &&
-            Objects.equals(releaseDate, movie.releaseDate);
+        FetchMovie that = (FetchMovie) o;
+        return id == that.id &&
+            voteCount == that.voteCount &&
+            video == that.video &&
+            Float.compare(that.voteAverage, voteAverage) == 0 &&
+            Float.compare(that.popularity, popularity) == 0 &&
+            adult == that.adult &&
+            Objects.equals(title, that.title) &&
+            Objects.equals(posterPath, that.posterPath) &&
+            Objects.equals(originalLanguage, that.originalLanguage) &&
+            Objects.equals(originalTitle, that.originalTitle) &&
+            Arrays.equals(genres, that.genres) &&
+            Objects.equals(backdropPath, that.backdropPath) &&
+            Objects.equals(overview, that.overview) &&
+            Objects.equals(tagline, that.tagline) &&
+            Objects.equals(releaseDate, that.releaseDate);
     }
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(id, title, voteCount, video, voteAverage, popularity, posterPath,
-            originalLanguage, originalTitle, backdropPath, adult, overview, tagline, releaseDate);
-        result = 31 * result + Arrays.hashCode(genreIds);
+        int result = Objects.hash(id, title, voteCount, video, voteAverage, popularity, posterPath, originalLanguage, originalTitle, backdropPath, adult, overview, tagline, releaseDate);
+        result = 31 * result + Arrays.hashCode(genres);
         return result;
     }
 
     @Override
     public String toString() {
-        return "Movie{" +
+        return "FetchMovie{" +
             "id=" + id +
             ", title='" + title + '\'' +
             ", voteCount=" + voteCount +
@@ -231,12 +241,44 @@ public class Movie extends BaseModel {
             ", posterPath='" + posterPath + '\'' +
             ", originalLanguage='" + originalLanguage + '\'' +
             ", originalTitle='" + originalTitle + '\'' +
-            ", genreIds=" + Arrays.toString(genreIds) +
+            ", genreIds=" + Arrays.toString(genres) +
             ", backdropPath='" + backdropPath + '\'' +
             ", adult=" + adult +
             ", overview='" + overview + '\'' +
             ", tagline='" + tagline + '\'' +
             ", releaseDate='" + releaseDate + '\'' +
             '}';
+    }
+
+    public String getYearText() {
+        String year = releaseDate;
+        if (year == null)
+            year = "";
+        else {
+            year = " (" + year.substring(0, year.indexOf("-")) + ")";
+        }
+        return year;
+    }
+
+    public String getGenresText() {
+        String genresTitle = "";
+        for (int i = 0; i < genres.length; i++) {
+            if (i < genres.length - 1)
+                genresTitle = genresTitle.concat(genres[i].getName() + ", ");
+            else
+                genresTitle = genresTitle.concat(genres[i].getName());
+        }
+        return genresTitle;
+    }
+
+    public String getCompaniesText() {
+        String genresTitle = "";
+        for (int i = 0; i < productionCompanies.length; i++) {
+            if (i < productionCompanies.length - 1)
+                genresTitle = genresTitle.concat(productionCompanies[i].getName() + ", ");
+            else
+                genresTitle = genresTitle.concat(productionCompanies[i].getName());
+        }
+        return genresTitle;
     }
 }

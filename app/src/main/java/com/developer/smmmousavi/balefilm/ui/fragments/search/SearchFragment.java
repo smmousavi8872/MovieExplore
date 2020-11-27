@@ -1,5 +1,6 @@
 package com.developer.smmmousavi.balefilm.ui.fragments.search;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
@@ -15,6 +16,7 @@ import com.developer.smmmousavi.balefilm.base.recyclerview.OnRvItemClickListener
 import com.developer.smmmousavi.balefilm.factory.viewmodel.ViewModelProviderFactory;
 import com.developer.smmmousavi.balefilm.helper.RecyclerViewHelper;
 import com.developer.smmmousavi.balefilm.model.Movie;
+import com.developer.smmmousavi.balefilm.ui.activities.detail.DetailActivity;
 import com.developer.smmmousavi.balefilm.ui.adapter.SearchMoviesRvAdapter;
 import com.developer.smmmousavi.balefilm.ui.fragments.base.BaseDaggerFragment;
 
@@ -43,6 +45,7 @@ public class SearchFragment extends BaseDaggerFragment implements OnRvItemClickL
 
     private SearchFragmentViewModel mViewModel;
     private SearchMoviesRvAdapter<Movie> mSearchMoviesRvAdapter;
+    private List<Movie> mMovieList;
     private String mQuery;
     private int mPage;
     private boolean mChange;
@@ -92,10 +95,11 @@ public class SearchFragment extends BaseDaggerFragment implements OnRvItemClickL
         mViewModel.requestSearchMovies(mQuery, mPage);
         mViewModel.getSearchMoviesLd().removeObservers(this);
         mViewModel.getSearchMoviesLd().observe(this, movies -> {
+            mMovieList = movies;
             //onChange()
             if (!mChange) {
                 Log.d(TAG, "subscribeRvObserver: onChange!");
-                setRvAdapterList(movies);
+                setRvAdapterList(mMovieList);
                 mDidScroll = false;
                 mChange = true;
                 new Handler().postDelayed(() -> {
@@ -165,7 +169,9 @@ public class SearchFragment extends BaseDaggerFragment implements OnRvItemClickL
 
     @Override
     public void onRvItemClick(int position, View view) {
-        Log.d(TAG, "onRvItemClick: position = " + position);
-
+        Log.d(TAG, "onItemClick: position item: " + position);
+        int movieId = mMovieList.get(position).getId();
+        Intent intent = DetailActivity.newIntent(getContext(), movieId);
+        startActivity(intent);
     }
 }

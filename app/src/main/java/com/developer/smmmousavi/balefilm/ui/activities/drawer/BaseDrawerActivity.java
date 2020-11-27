@@ -14,7 +14,6 @@ import com.developer.smmmousavi.balefilm.ui.adapter.PagerAdapter;
 import com.developer.smmmousavi.balefilm.ui.fragments.base.BaseDaggerFragment;
 import com.developer.smmmousavi.balefilm.ui.fragments.home.HomeFragment;
 import com.developer.smmmousavi.balefilm.ui.fragments.search.SearchFragment;
-import com.developer.smmmousavi.balefilm.ui.fragments.setting.SettingFragment;
 import com.developer.smmmousavi.balefilm.util.KeyboardUtils;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -23,9 +22,6 @@ import com.google.android.material.navigation.NavigationView;
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.annotation.AnimRes;
-import androidx.annotation.AnimatorRes;
-import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.core.content.ContextCompat;
@@ -150,9 +146,6 @@ public abstract class BaseDrawerActivity extends BaseDaggerCompatActivity
                     case 1:
                         mBottomNavigationView.getMenu().findItem(R.id.navbarSearch).setChecked(true);
                         break;
-                    case 2:
-                        mBottomNavigationView.getMenu().findItem(R.id.navbarSetting).setChecked(true);
-                        break;
                 }
             }
 
@@ -166,7 +159,6 @@ public abstract class BaseDrawerActivity extends BaseDaggerCompatActivity
         mFragmentList = new ArrayList<>();
         mFragmentList.add(HomeFragment.newInstance());
         mFragmentList.add(SearchFragment.newInstance());
-        mFragmentList.add(SettingFragment.newInstance());
     }
 
     private void initButtonNavView() {
@@ -199,33 +191,33 @@ public abstract class BaseDrawerActivity extends BaseDaggerCompatActivity
                                 R.anim.activity_left_to_right,
                                 R.anim.activity_left_to_right2,
                                 false);*/
-                        } else if (mHostedFragment instanceof SettingFragment) {
+                        } /*else if (mHostedFragment instanceof SettingFragment) {
                             mHostedFragment = SearchFragment.newInstance();
-                            /*replaceFragment(R.id.flDrawerContentFragmentContainer,
+                            replaceFragment(R.id.flDrawerContentFragmentContainer,
                                 mHostedFragment,
                                 SearchFragment.TAG,
                                 R.anim.activity_right_to_left,
                                 R.anim.activity_right_to_left2,
-                                false);*/
-                        }
+                                false);
+                        }*/
                     } else {
                         SearchFragment fragment = (SearchFragment) mFragmentList.get(1);
                         fragment.smoothScrollTop();
                     }
                     break;
-                case R.id.navbarSetting:
+                /*case R.id.navbarSetting:
                     if (!(mHostedFragment instanceof SettingFragment)) {
                         KeyboardUtils.hideKeyboard(this);
                         mHostedFragment = SettingFragment.newInstance();
                         mViewPager.setCurrentItem(2);
-                        /*replaceFragment(R.id.flDrawerContentFragmentContainer,
+                        replaceFragment(R.id.flDrawerContentFragmentContainer,
                             mHostedFragment,
                             SettingFragment.TAG,
                             R.anim.activity_left_to_right,
                             R.anim.activity_left_to_right2,
-                            false);*/
+                            false);
                     }
-                    break;
+                    break;*/
             }
             return true;
         });
@@ -285,35 +277,6 @@ public abstract class BaseDrawerActivity extends BaseDaggerCompatActivity
         }
     }
 
-    public void replaceFragment(@IdRes int containerId,
-                                @NonNull BaseDaggerFragment newFragment,
-                                @NonNull String newTag,
-                                @AnimatorRes @AnimRes int enterAnimId,
-                                @AnimatorRes @AnimRes int exitAnimId,
-                                boolean popPrevious) {
-
-        assert getFragmentManager() != null;
-        FragmentManager fm = getSupportFragmentManager();
-        BaseDaggerFragment foundFragment = (BaseDaggerFragment) fm.findFragmentByTag(newTag);
-        if (popPrevious) {
-            int frgCount = fm.getBackStackEntryCount();
-            if (frgCount > 0)
-                fm.popBackStack();
-        }
-
-        if (foundFragment == null)
-            fm.beginTransaction()
-                .setCustomAnimations(enterAnimId, exitAnimId)
-                .replace(containerId, newFragment, newTag)
-                .addToBackStack(newTag)
-                .commit();
-        else
-            fm.beginTransaction()
-                .setCustomAnimations(enterAnimId, exitAnimId)
-                .replace(containerId, newFragment, newTag)
-                .commit();
-    }
-
 
     @OnClick(R.id.imgNavbarButton)
     void setNavBarListener() {
@@ -341,7 +304,6 @@ public abstract class BaseDrawerActivity extends BaseDaggerCompatActivity
         getMenuInflater().inflate(R.menu.menu_navbar, menu);
         return true;
     }
-
 
     @Override
     public void onBack() {

@@ -1,12 +1,11 @@
 package com.developer.smmmousavi.balefilm.ui.fragments.base;
 
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
-import com.developer.smmmousavi.balefilm.R;
-
+import androidx.annotation.AnimRes;
+import androidx.annotation.AnimatorRes;
+import androidx.annotation.IdRes;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -29,13 +28,33 @@ public class BaseDaggerFragment extends DaggerFragment {
         mFm = getFragmentManager();
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_base_dagger, container, false);
+    public void replaceFragment(@IdRes int containerId,
+                                @NonNull BaseDaggerFragment newFragment,
+                                @NonNull String newTag,
+                                @AnimatorRes @AnimRes int enterAnimId,
+                                @AnimatorRes @AnimRes int exitAnimId,
+                                boolean popPrevious) {
 
-        return v;
+        assert getFragmentManager() != null;
+
+        BaseDaggerFragment foundFragment = (BaseDaggerFragment) mFm.findFragmentByTag(newTag);
+        if (popPrevious) {
+            int frgCount = mFm.getBackStackEntryCount();
+            if (frgCount > 0)
+                mFm.popBackStack();
+        }
+
+        if (foundFragment == null)
+            mFm.beginTransaction()
+                .setCustomAnimations(enterAnimId, exitAnimId)
+                .replace(containerId, newFragment, newTag)
+                .addToBackStack(newTag)
+                .commit();
+        else
+            mFm.beginTransaction()
+                .setCustomAnimations(enterAnimId, exitAnimId)
+                .replace(containerId, newFragment, newTag)
+                .commit();
     }
 
 

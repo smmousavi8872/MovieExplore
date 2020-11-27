@@ -1,10 +1,12 @@
 package com.developer.smmmousavi.balefilm.network.api;
 
+import com.developer.smmmousavi.balefilm.model.FetchMovie;
 import com.developer.smmmousavi.balefilm.network.responses.GenreResponse;
 import com.developer.smmmousavi.balefilm.network.responses.MovieResponse;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface MovieRestApi {
@@ -28,6 +30,12 @@ public interface MovieRestApi {
 
     @GET("genre/movie/list")
     Call<GenreResponse> getGenres(
+        @Query("api_key") String apiKey
+    );
+
+    @GET("movie/{movie_id}")
+    Call<FetchMovie> fetchMovieById(
+        @Path("movie_id") int movieId,
         @Query("api_key") String apiKey
     );
 }

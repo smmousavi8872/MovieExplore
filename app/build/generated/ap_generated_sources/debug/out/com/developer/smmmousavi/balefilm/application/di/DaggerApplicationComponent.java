@@ -10,22 +10,30 @@ import android.content.ContentProvider;
 import androidx.lifecycle.ViewModel;
 import com.developer.smmmousavi.balefilm.application.BaseApplication;
 import com.developer.smmmousavi.balefilm.factory.viewmodel.ViewModelProviderFactory;
-import com.developer.smmmousavi.balefilm.repository.FilteredMovieRepository;
 import com.developer.smmmousavi.balefilm.repository.GenreRepository;
+import com.developer.smmmousavi.balefilm.repository.MoviesRepository;
 import com.developer.smmmousavi.balefilm.repository.SearchMovieRepository;
 import com.developer.smmmousavi.balefilm.ui.activities.base.ActivityBuildersModule_ContributeBaseDaggerCompatActivity;
 import com.developer.smmmousavi.balefilm.ui.activities.base.ActivityBuildersModule_ContributeBaseDrawerActivity;
+import com.developer.smmmousavi.balefilm.ui.activities.base.ActivityBuildersModule_ContributeDetailActivity;
 import com.developer.smmmousavi.balefilm.ui.activities.base.ActivityBuildersModule_ContributeMainActivity;
 import com.developer.smmmousavi.balefilm.ui.activities.base.ActivityBuildersModule_ContributeSingleFragmentActivity;
 import com.developer.smmmousavi.balefilm.ui.activities.base.BaseDaggerCompatActivity;
+import com.developer.smmmousavi.balefilm.ui.activities.detail.DetailActivity;
 import com.developer.smmmousavi.balefilm.ui.activities.drawer.BaseDrawerActivity;
 import com.developer.smmmousavi.balefilm.ui.activities.main.MainActivity;
 import com.developer.smmmousavi.balefilm.ui.activities.singlefragment.SingleFragmentActivity;
 import com.developer.smmmousavi.balefilm.ui.fragments.base.BaseDaggerFragment;
 import com.developer.smmmousavi.balefilm.ui.fragments.base.di.FragmentsBuilderModule_ContributeBaseDaggerFragment;
+import com.developer.smmmousavi.balefilm.ui.fragments.base.di.FragmentsBuilderModule_ContributeDetailFragment;
 import com.developer.smmmousavi.balefilm.ui.fragments.base.di.FragmentsBuilderModule_ContributeHomeDaggerFragment;
 import com.developer.smmmousavi.balefilm.ui.fragments.base.di.FragmentsBuilderModule_ContributeSearchFragment;
-import com.developer.smmmousavi.balefilm.ui.fragments.base.di.FragmentsBuilderModule_ContributeSettingDaggerFragment;
+import com.developer.smmmousavi.balefilm.ui.fragments.detail.DetailFragment;
+import com.developer.smmmousavi.balefilm.ui.fragments.detail.DetailFragmentViewModel;
+import com.developer.smmmousavi.balefilm.ui.fragments.detail.DetailFragmentViewModel_Factory;
+import com.developer.smmmousavi.balefilm.ui.fragments.detail.DetailFragment_MembersInjector;
+import com.developer.smmmousavi.balefilm.ui.fragments.detail.di.DetailFragmentModule;
+import com.developer.smmmousavi.balefilm.ui.fragments.detail.di.DetailFragmentModule_ProvideMovieRepositoryFactory;
 import com.developer.smmmousavi.balefilm.ui.fragments.home.HomeFragment;
 import com.developer.smmmousavi.balefilm.ui.fragments.home.HomeFragmentViewModel;
 import com.developer.smmmousavi.balefilm.ui.fragments.home.HomeFragmentViewModel_Factory;
@@ -41,7 +49,6 @@ import com.developer.smmmousavi.balefilm.ui.fragments.search.SearchFragment_Memb
 import com.developer.smmmousavi.balefilm.ui.fragments.search.di.SearchFragmentModule;
 import com.developer.smmmousavi.balefilm.ui.fragments.search.di.SearchFragmentModule_ProvideRecyclerViewHelperFactory;
 import com.developer.smmmousavi.balefilm.ui.fragments.search.di.SearchFragmentModule_ProvideSearchMovieRepositoryFactory;
-import com.developer.smmmousavi.balefilm.ui.fragments.setting.SettingFragment;
 import dagger.android.AndroidInjector;
 import dagger.android.DaggerApplication_MembersInjector;
 import dagger.android.DispatchingAndroidInjector;
@@ -75,6 +82,10 @@ public final class DaggerApplicationComponent implements ApplicationComponent {
       mainActivitySubcomponentFactoryProvider;
 
   private Provider<
+          ActivityBuildersModule_ContributeDetailActivity.DetailActivitySubcomponent.Factory>
+      detailActivitySubcomponentFactoryProvider;
+
+  private Provider<
           FragmentsBuilderModule_ContributeBaseDaggerFragment.BaseDaggerFragmentSubcomponent
               .Factory>
       baseDaggerFragmentSubcomponentFactoryProvider;
@@ -88,9 +99,8 @@ public final class DaggerApplicationComponent implements ApplicationComponent {
       searchFragmentSubcomponentFactoryProvider;
 
   private Provider<
-          FragmentsBuilderModule_ContributeSettingDaggerFragment.SettingFragmentSubcomponent
-              .Factory>
-      settingFragmentSubcomponentFactoryProvider;
+          FragmentsBuilderModule_ContributeDetailFragment.DetailFragmentSubcomponent.Factory>
+      detailFragmentSubcomponentFactoryProvider;
 
   private Provider<Application> applicationProvider;
 
@@ -105,7 +115,7 @@ public final class DaggerApplicationComponent implements ApplicationComponent {
 
   private Map<Class<?>, Provider<AndroidInjector.Factory<?>>>
       getMapOfClassOfAndProviderOfAndroidInjectorFactoryOf() {
-    return MapBuilder.<Class<?>, Provider<AndroidInjector.Factory<?>>>newMapBuilder(8)
+    return MapBuilder.<Class<?>, Provider<AndroidInjector.Factory<?>>>newMapBuilder(9)
         .put(
             BaseDaggerCompatActivity.class,
             (Provider) baseDaggerCompatActivitySubcomponentFactoryProvider)
@@ -114,10 +124,11 @@ public final class DaggerApplicationComponent implements ApplicationComponent {
             SingleFragmentActivity.class,
             (Provider) singleFragmentActivitySubcomponentFactoryProvider)
         .put(MainActivity.class, (Provider) mainActivitySubcomponentFactoryProvider)
+        .put(DetailActivity.class, (Provider) detailActivitySubcomponentFactoryProvider)
         .put(BaseDaggerFragment.class, (Provider) baseDaggerFragmentSubcomponentFactoryProvider)
         .put(HomeFragment.class, (Provider) homeFragmentSubcomponentFactoryProvider)
         .put(SearchFragment.class, (Provider) searchFragmentSubcomponentFactoryProvider)
-        .put(SettingFragment.class, (Provider) settingFragmentSubcomponentFactoryProvider)
+        .put(DetailFragment.class, (Provider) detailFragmentSubcomponentFactoryProvider)
         .build();
   }
 
@@ -197,6 +208,15 @@ public final class DaggerApplicationComponent implements ApplicationComponent {
             return new MainActivitySubcomponentFactory();
           }
         };
+    this.detailActivitySubcomponentFactoryProvider =
+        new Provider<
+            ActivityBuildersModule_ContributeDetailActivity.DetailActivitySubcomponent.Factory>() {
+          @Override
+          public ActivityBuildersModule_ContributeDetailActivity.DetailActivitySubcomponent.Factory
+              get() {
+            return new DetailActivitySubcomponentFactory();
+          }
+        };
     this.baseDaggerFragmentSubcomponentFactoryProvider =
         new Provider<
             FragmentsBuilderModule_ContributeBaseDaggerFragment.BaseDaggerFragmentSubcomponent
@@ -228,15 +248,13 @@ public final class DaggerApplicationComponent implements ApplicationComponent {
             return new SearchFragmentSubcomponentFactory();
           }
         };
-    this.settingFragmentSubcomponentFactoryProvider =
+    this.detailFragmentSubcomponentFactoryProvider =
         new Provider<
-            FragmentsBuilderModule_ContributeSettingDaggerFragment.SettingFragmentSubcomponent
-                .Factory>() {
+            FragmentsBuilderModule_ContributeDetailFragment.DetailFragmentSubcomponent.Factory>() {
           @Override
-          public FragmentsBuilderModule_ContributeSettingDaggerFragment.SettingFragmentSubcomponent
-                  .Factory
+          public FragmentsBuilderModule_ContributeDetailFragment.DetailFragmentSubcomponent.Factory
               get() {
-            return new SettingFragmentSubcomponentFactory();
+            return new DetailFragmentSubcomponentFactory();
           }
         };
     this.applicationProvider = InstanceFactory.create(applicationParam);
@@ -427,6 +445,42 @@ public final class DaggerApplicationComponent implements ApplicationComponent {
     }
   }
 
+  private final class DetailActivitySubcomponentFactory
+      implements ActivityBuildersModule_ContributeDetailActivity.DetailActivitySubcomponent
+          .Factory {
+    @Override
+    public ActivityBuildersModule_ContributeDetailActivity.DetailActivitySubcomponent create(
+        DetailActivity arg0) {
+      Preconditions.checkNotNull(arg0);
+      return new DetailActivitySubcomponentImpl(arg0);
+    }
+  }
+
+  private final class DetailActivitySubcomponentImpl
+      implements ActivityBuildersModule_ContributeDetailActivity.DetailActivitySubcomponent {
+    private DetailActivitySubcomponentImpl(DetailActivity arg0) {}
+
+    private DispatchingAndroidInjector<androidx.fragment.app.Fragment>
+        getDispatchingAndroidInjectorOfFragment() {
+      return DispatchingAndroidInjector_Factory.newInstance(
+          DaggerApplicationComponent.this.getMapOfClassOfAndProviderOfAndroidInjectorFactoryOf(),
+          Collections.<String, Provider<AndroidInjector.Factory<?>>>emptyMap());
+    }
+
+    @Override
+    public void inject(DetailActivity arg0) {
+      injectDetailActivity(arg0);
+    }
+
+    private DetailActivity injectDetailActivity(DetailActivity instance) {
+      DaggerAppCompatActivity_MembersInjector.injectSupportFragmentInjector(
+          instance, getDispatchingAndroidInjectorOfFragment());
+      DaggerAppCompatActivity_MembersInjector.injectFrameworkFragmentInjector(
+          instance, DaggerApplicationComponent.this.getDispatchingAndroidInjectorOfFragment());
+      return instance;
+    }
+  }
+
   private final class BaseDaggerFragmentSubcomponentFactory
       implements FragmentsBuilderModule_ContributeBaseDaggerFragment.BaseDaggerFragmentSubcomponent
           .Factory {
@@ -477,7 +531,7 @@ public final class DaggerApplicationComponent implements ApplicationComponent {
       implements FragmentsBuilderModule_ContributeHomeDaggerFragment.HomeFragmentSubcomponent {
     private final HomeFragmentModule homeFragmentModule;
 
-    private Provider<FilteredMovieRepository> provideMovieRepositoryProvider;
+    private Provider<MoviesRepository> provideMovieRepositoryProvider;
 
     private Provider<GenreRepository> provideGenreRepositoryProvider;
 
@@ -609,21 +663,28 @@ public final class DaggerApplicationComponent implements ApplicationComponent {
     }
   }
 
-  private final class SettingFragmentSubcomponentFactory
-      implements FragmentsBuilderModule_ContributeSettingDaggerFragment.SettingFragmentSubcomponent
+  private final class DetailFragmentSubcomponentFactory
+      implements FragmentsBuilderModule_ContributeDetailFragment.DetailFragmentSubcomponent
           .Factory {
     @Override
-    public FragmentsBuilderModule_ContributeSettingDaggerFragment.SettingFragmentSubcomponent
-        create(SettingFragment arg0) {
+    public FragmentsBuilderModule_ContributeDetailFragment.DetailFragmentSubcomponent create(
+        DetailFragment arg0) {
       Preconditions.checkNotNull(arg0);
-      return new SettingFragmentSubcomponentImpl(arg0);
+      return new DetailFragmentSubcomponentImpl(new DetailFragmentModule(), arg0);
     }
   }
 
-  private final class SettingFragmentSubcomponentImpl
-      implements FragmentsBuilderModule_ContributeSettingDaggerFragment
-          .SettingFragmentSubcomponent {
-    private SettingFragmentSubcomponentImpl(SettingFragment arg0) {}
+  private final class DetailFragmentSubcomponentImpl
+      implements FragmentsBuilderModule_ContributeDetailFragment.DetailFragmentSubcomponent {
+    private Provider<MoviesRepository> provideMovieRepositoryProvider;
+
+    private Provider<DetailFragmentViewModel> detailFragmentViewModelProvider;
+
+    private DetailFragmentSubcomponentImpl(
+        DetailFragmentModule detailFragmentModuleParam, DetailFragment arg0) {
+
+      initialize(detailFragmentModuleParam, arg0);
+    }
 
     private DispatchingAndroidInjector<androidx.fragment.app.Fragment>
         getDispatchingAndroidInjectorOfFragment() {
@@ -632,14 +693,36 @@ public final class DaggerApplicationComponent implements ApplicationComponent {
           Collections.<String, Provider<AndroidInjector.Factory<?>>>emptyMap());
     }
 
-    @Override
-    public void inject(SettingFragment arg0) {
-      injectSettingFragment(arg0);
+    private Map<Class<? extends ViewModel>, Provider<ViewModel>>
+        getMapOfClassOfAndProviderOfViewModel() {
+      return Collections.<Class<? extends ViewModel>, Provider<ViewModel>>singletonMap(
+          DetailFragmentViewModel.class, (Provider) detailFragmentViewModelProvider);
     }
 
-    private SettingFragment injectSettingFragment(SettingFragment instance) {
+    private ViewModelProviderFactory getViewModelProviderFactory() {
+      return new ViewModelProviderFactory(getMapOfClassOfAndProviderOfViewModel());
+    }
+
+    @SuppressWarnings("unchecked")
+    private void initialize(
+        final DetailFragmentModule detailFragmentModuleParam, final DetailFragment arg0) {
+      this.provideMovieRepositoryProvider =
+          DetailFragmentModule_ProvideMovieRepositoryFactory.create(detailFragmentModuleParam);
+      this.detailFragmentViewModelProvider =
+          DetailFragmentViewModel_Factory.create(
+              DaggerApplicationComponent.this.applicationProvider, provideMovieRepositoryProvider);
+    }
+
+    @Override
+    public void inject(DetailFragment arg0) {
+      injectDetailFragment(arg0);
+    }
+
+    private DetailFragment injectDetailFragment(DetailFragment instance) {
       DaggerFragment_MembersInjector.injectChildFragmentInjector(
           instance, getDispatchingAndroidInjectorOfFragment());
+      DetailFragment_MembersInjector.injectMProviderFactory(
+          instance, getViewModelProviderFactory());
       return instance;
     }
   }

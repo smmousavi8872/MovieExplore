@@ -11,9 +11,5 @@
     android:icon="@drawable/ic_search_24"
     android:enabled="true"
     android:title="@string/text_navbar_search"/>
-  <item
-    android:id="@+id/navbarSetting"
-    android:icon="@drawable/ic_settings_24"
-    android:enabled="true"
-    android:title="@string/text_navbar_setting"/>
+
 </menu>

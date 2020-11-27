@@ -5,7 +5,7 @@ import android.app.Application;
 import com.developer.smmmousavi.balefilm.base.BaseViewModel;
 import com.developer.smmmousavi.balefilm.model.Genre;
 import com.developer.smmmousavi.balefilm.model.Movie;
-import com.developer.smmmousavi.balefilm.repository.FilteredMovieRepository;
+import com.developer.smmmousavi.balefilm.repository.MoviesRepository;
 import com.developer.smmmousavi.balefilm.repository.GenreRepository;
 
 import java.util.List;
@@ -29,7 +29,7 @@ public class HomeFragmentViewModel extends BaseViewModel {
     private boolean mIsQueryExhausted;
 
     @Inject
-    FilteredMovieRepository mMovieRepository;
+    MoviesRepository mMovieRepository;
     @Inject
     GenreRepository mGenreRepository;
 
@@ -51,7 +51,7 @@ public class HomeFragmentViewModel extends BaseViewModel {
         mSortBy = sortBy;
         mReleaseYear = releaseYear;
         mPageNumber = page;
-        mMovieRepository.requestFilteredMovies(mGenreId, mSortBy, mReleaseYear, mPageNumber);
+        mMovieRepository.requestFilterMovies(mGenreId, mSortBy, mReleaseYear, mPageNumber);
     }
 
     public LiveData<List<Genre>> getGenresLd() {

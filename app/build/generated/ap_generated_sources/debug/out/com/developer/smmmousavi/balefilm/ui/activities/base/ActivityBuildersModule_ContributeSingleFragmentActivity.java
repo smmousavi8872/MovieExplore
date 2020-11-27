@@ -1,6 +1,7 @@
 package com.developer.smmmousavi.balefilm.ui.activities.base;
 
 import com.developer.smmmousavi.balefilm.ui.activities.singlefragment.SingleFragmentActivity;
+import com.developer.smmmousavi.balefilm.ui.activities.singlefragment.di.SingleFragmentActivityModule;
 import dagger.Binds;
 import dagger.Module;
 import dagger.Subcomponent;
@@ -22,7 +23,7 @@ public abstract class ActivityBuildersModule_ContributeSingleFragmentActivity {
   abstract AndroidInjector.Factory<?> bindAndroidInjectorFactory(
       SingleFragmentActivitySubcomponent.Factory builder);
 
-  @Subcomponent
+  @Subcomponent(modules = SingleFragmentActivityModule.class)
   public interface SingleFragmentActivitySubcomponent
       extends AndroidInjector<SingleFragmentActivity> {
     @Subcomponent.Factory

@@ -1,5 +1,6 @@
 package com.developer.smmmousavi.balefilm.ui.fragments.home;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,6 +18,7 @@ import com.developer.smmmousavi.balefilm.helper.RecyclerViewHelper;
 import com.developer.smmmousavi.balefilm.model.Genre;
 import com.developer.smmmousavi.balefilm.model.Movie;
 import com.developer.smmmousavi.balefilm.model.Sort;
+import com.developer.smmmousavi.balefilm.ui.activities.detail.DetailActivity;
 import com.developer.smmmousavi.balefilm.ui.adapter.MainMoviesRvAdapter;
 import com.developer.smmmousavi.balefilm.ui.fragments.base.BaseDaggerFragment;
 
@@ -53,6 +55,7 @@ public class HomeFragment extends BaseDaggerFragment implements OnRvItemClickLis
 
     private HomeFragmentViewModel mViewModel;
     private MainMoviesRvAdapter<Movie> mMainMoviesRvAdapter;
+    private List<Movie> mMovieList;
     private Sort mSortBy;
     private Genre mGenre;
     private int mYear;
@@ -120,12 +123,13 @@ public class HomeFragment extends BaseDaggerFragment implements OnRvItemClickLis
         mViewModel.requestFilteredMovies(String.valueOf(mGenre.getId()), mSortBy.getValue(), mYear, mPage);
         mViewModel.getFilteredMoviesLd().removeObservers(this);
         mViewModel.getFilteredMoviesLd().observe(this, movies -> {
+            mMovieList = movies;
             //onChange()
             if (!mChange) {
                 Log.d(TAG, "subscribeRvObserver:  Rv onchange!");
                 if (mRefreshLayout.isRefreshing())
                     mRefreshLayout.setRefreshing(false);
-                setRvAdapterList(movies);
+                setRvAdapterList(mMovieList);
                 mDidScroll = false;
                 mChange = true;
                 mPrgLoading.setVisibility(View.GONE);
@@ -236,5 +240,8 @@ public class HomeFragment extends BaseDaggerFragment implements OnRvItemClickLis
     @Override
     public void onRvItemClick(int position, View view) {
         Log.d(TAG, "onItemClick: position item: " + position);
+        int movieId = mMovieList.get(position).getId();
+        Intent intent = DetailActivity.newIntent(getContext(), movieId);
+        startActivity(intent);
     }
 }

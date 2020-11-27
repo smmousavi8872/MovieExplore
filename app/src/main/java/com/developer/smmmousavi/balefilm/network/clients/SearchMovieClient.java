@@ -10,7 +10,7 @@ import com.developer.smmmousavi.balefilm.network.responses.MovieResponse;
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.MediatorLiveData;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -20,8 +20,8 @@ public class SearchMovieClient {
     private static final String TAG = "FilteredMoviesClient";
 
     private static SearchMovieClient sInstance;
-    private final MutableLiveData<List<Movie>> mFilteredMoviesLd;
-    private final MutableLiveData<Boolean> mFilteredMoviesFailLd;
+    private final MediatorLiveData<List<Movie>> mFilteredMoviesLd;
+    private final MediatorLiveData<Boolean> mFilteredMoviesFailLd;
     private boolean mIsPerformingQuery;
     private boolean mIsQueryExhausted;
     private int mPage;
@@ -34,15 +34,15 @@ public class SearchMovieClient {
     }
 
     private SearchMovieClient() {
-        mFilteredMoviesLd = new MutableLiveData<>();
-        mFilteredMoviesFailLd = new MutableLiveData<>();
+        mFilteredMoviesLd = new MediatorLiveData<>();
+        mFilteredMoviesFailLd = new MediatorLiveData<>();
     }
 
-    public MutableLiveData<List<Movie>> getSearchMovieLd() {
+    public MediatorLiveData<List<Movie>> getSearchMovieLd() {
         return mFilteredMoviesLd;
     }
 
-    public MutableLiveData<Boolean> getSearchMoviesFailureLd() {
+    public MediatorLiveData<Boolean> getSearchMoviesFailureLd() {
         return mFilteredMoviesFailLd;
     }
 
