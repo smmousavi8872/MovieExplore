@@ -60,10 +60,6 @@ public class Movie extends BaseModel {
     @Expose
     private String overview;
 
-    @SerializedName("tagline")
-    @Expose
-    private String tagline;
-
     @SerializedName("release_date")
     @Expose
     private String releaseDate;
@@ -180,13 +176,6 @@ public class Movie extends BaseModel {
         this.releaseDate = releaseDate;
     }
 
-    public String getTagline() {
-        return tagline;
-    }
-
-    public void setTagline(String tagline) {
-        this.tagline = tagline;
-    }
 
     @Override
     public boolean equals(Object o) {
@@ -207,14 +196,13 @@ public class Movie extends BaseModel {
             Arrays.equals(genreIds, movie.genreIds) &&
             Objects.equals(backdropPath, movie.backdropPath) &&
             Objects.equals(overview, movie.overview) &&
-            Objects.equals(tagline, movie.tagline) &&
             Objects.equals(releaseDate, movie.releaseDate);
     }
 
     @Override
     public int hashCode() {
         int result = Objects.hash(id, title, voteCount, video, voteAverage, popularity, posterPath,
-            originalLanguage, originalTitle, backdropPath, adult, overview, tagline, releaseDate);
+            originalLanguage, originalTitle, backdropPath, adult, overview, releaseDate);
         result = 31 * result + Arrays.hashCode(genreIds);
         return result;
     }
@@ -235,8 +223,22 @@ public class Movie extends BaseModel {
             ", backdropPath='" + backdropPath + '\'' +
             ", adult=" + adult +
             ", overview='" + overview + '\'' +
-            ", tagline='" + tagline + '\'' +
             ", releaseDate='" + releaseDate + '\'' +
             '}';
+    }
+
+    public String getYearText() {
+        try {
+            String year = releaseDate;
+            if (year == null)
+                year = "";
+            else {
+                year = " (" + year.substring(0, year.indexOf("-")) + ")";
+            }
+            return year;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "";
+        }
     }
 }
