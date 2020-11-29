@@ -1,7 +1,6 @@
 package com.developer.smmmousavi.balefilm.ui.fragments.detail;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -92,7 +91,6 @@ public class DetailFragment extends BaseDaggerFragment {
         View v = inflater.inflate(R.layout.fragment_detail, container, false);
         ButterKnife.bind(this, v);
         mMovieId = Objects.requireNonNull(getArguments()).getInt(ARGS_MOVIE_ID);
-        Log.d(TAG, "onCreateView: called");
 
         subscribeObservers();
 
@@ -109,7 +107,6 @@ public class DetailFragment extends BaseDaggerFragment {
             //onChange()
             if (mMovieId == movie.getId()) {
                 mMovieId = movie.getId();
-                Log.d(TAG, "onChangeDetail: called");
                 setViewContent(movie);
                 showContent(true);
             } else {
@@ -137,7 +134,10 @@ public class DetailFragment extends BaseDaggerFragment {
         mTxtMovieTitle.setText(title);
         mTxtMovieOverview.setText(movie.getOverview());
         mTxtTagline.setText(movie.getTagline());
-        mTxtVoteAverage.setText(String.valueOf(movie.getVoteAverage()));
+        if (movie.getVoteAverage() >= 10)
+            mTxtVoteAverage.setText("10");
+        else
+            mTxtVoteAverage.setText(String.valueOf(movie.getVoteAverage()));
         mTxtVoteCount.setText(String.valueOf(movie.getVoteCount()));
         mTxtReleaseDate.setText(movie.getReleaseDate());
         mTxtGenresTitle.setText(movie.getGenresText());

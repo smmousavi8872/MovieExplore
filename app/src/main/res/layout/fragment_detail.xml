@@ -71,60 +71,60 @@
         android:textSize="20sp"
         app:fontFamily="sans-serif-medium" />
 
+        <LinearLayout
+          android:layout_gravity="center"
+          android:gravity="center"
+          android:orientation="vertical"
+          android:layout_weight="0.16"
+          android:layout_width="0dp"
+          android:layout_height="wrap_content">
+
+          <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
         <androidx.appcompat.widget.AppCompatTextView
           android:id="@+id/txtVoteAverage"
-          android:layout_width="0dp"
-          android:layout_weight=".090"
+          android:layout_width="wrap_content"
           android:text="10"
           android:textSize="26sp"
           android:textColor="@color/colorPrimary"
-          android:gravity="center"
+          android:gravity="end"
           app:fontFamily="sans-serif-condensed"
           android:layout_height="wrap_content"/>
 
         <androidx.appcompat.widget.AppCompatTextView
           android:gravity="center"
-          android:layout_width="0dp"
-          android:layout_weight="0.070"
+          android:layout_width="wrap_content"
           android:text="/10"
           android:textSize="17sp"
           app:fontFamily="sans-serif-condensed"
           android:textColor="@color/colorDarkGrey"
           android:layout_height="wrap_content"/>
+          </LinearLayout>
+          <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/txtVoteCount"
+            app:fontFamily="sans-serif-condensed"
+            android:textSize="16sp"
+            android:layout_width="wrap_content"
+            android:text="127225"
+            android:layout_height="wrap_content"/>
+
         </LinearLayout>
-
-    <LinearLayout
-
-      android:orientation="horizontal"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content">
+      </LinearLayout>
 
       <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/txtTagline"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="0.840"
         android:paddingStart="16dp"
+        android:padding="2dp"
         android:paddingEnd="16dp"
         android:textColor="@color/pureWhite"
         android:text="This is title of Movie (2015)"
         android:textSize="15sp"
         app:fontFamily="sans-serif" />
-
-      <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/txtVoteCount"
-        app:fontFamily="sans-serif-condensed"
-        android:textSize="16sp"
-        android:layout_width="0dp"
-        android:gravity="center"
-        android:layout_weight="0.160"
-        android:text="127225"
-        android:layout_gravity="end"
-        android:layout_height="wrap_content"/>
-
-
-    </LinearLayout>
-
 
       <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/txtMovieOverview"

@@ -27,7 +27,6 @@ import androidx.appcompat.widget.AppCompatImageView;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
@@ -81,7 +80,7 @@ public abstract class BaseDrawerActivity extends BaseDaggerCompatActivity
 
         setStateBarColor();
 
-        //insertContentFragment(this);
+        insertContentFragment(this);
 
         initNavView();
 
@@ -183,8 +182,8 @@ public abstract class BaseDrawerActivity extends BaseDaggerCompatActivity
                 case R.id.navbarSearch:
                     if (!(mHostedFragment instanceof SearchFragment)) {
                         mViewPager.setCurrentItem(1);
+                        mHostedFragment = SearchFragment.newInstance();
                         if (mHostedFragment instanceof HomeFragment) {
-                            mHostedFragment = SearchFragment.newInstance();
                             /*replaceFragment(R.id.flDrawerContentFragmentContainer,
                                 mHostedFragment,
                                 SearchFragment.TAG,
@@ -265,7 +264,7 @@ public abstract class BaseDrawerActivity extends BaseDaggerCompatActivity
 
     public void insertContentFragment(SetOnContentFragmentInsert contentSet) {
         mHostedFragment = contentSet.getFragmentObject();
-        int containerId = contentSet.getFragmentId();
+       /* int containerId = contentSet.getFragmentId();
         String fragmentTag = contentSet.getFragmentTag();
 
         Fragment foundFragment = mFm.findFragmentById(containerId);
@@ -274,7 +273,7 @@ public abstract class BaseDrawerActivity extends BaseDaggerCompatActivity
             mFm.beginTransaction()
                 .add(containerId, mHostedFragment, fragmentTag)
                 .commit();
-        }
+        }*/
     }
 
 

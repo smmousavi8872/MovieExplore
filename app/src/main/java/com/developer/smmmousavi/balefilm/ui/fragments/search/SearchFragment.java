@@ -103,7 +103,7 @@ public class SearchFragment extends BaseDaggerFragment implements OnRvItemClickL
             if (!mChange) {
                 mDidScroll = false;
                 mChange = true;
-                if (mMovieList != null) {
+                if (mMovieList != null && mMovieList.size() > 0) {
                     setRvAdapterList(mMovieList);
                 } else
                     resetRv();

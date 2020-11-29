@@ -20,8 +20,8 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
-
--keep class com.developer.smmmousavi.dandanyar.** { *; }
+#TODO: change packagename
+-keep class com.developer.smmmousavi.balefilm.** { *; }
 -dontusemixedcaseclassnames
 -dontskipnonpubliclibraryclasses
 -verbose
@@ -96,7 +96,6 @@
 
 -keep public class * extends android.app.Activity
 -keep public class * extends android.app.Application
--keep public class * extends android.app.MapActivity
 -keep public class * extends android.app.Service
 -keep public class * extends android.content.BroadcastReceiver
 -keep public class * extends android.content.ContentProvider
