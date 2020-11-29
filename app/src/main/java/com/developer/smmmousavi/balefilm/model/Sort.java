@@ -3,7 +3,7 @@ package com.developer.smmmousavi.balefilm.model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Sort {
+public class Sort extends BaseModel{
 
     private String mName;
 

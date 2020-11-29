@@ -8,11 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ProgressBar;
-import android.widget.Spinner;
 
-import com.developer.smmmousavi.balefilm.R;
 import com.developer.smmmousavi.balefilm.base.recyclerview.OnRvItemClickListener;
+import com.developer.smmmousavi.balefilm.databinding.FragmentHomeBinding;
 import com.developer.smmmousavi.balefilm.factory.viewmodel.ViewModelProviderFactory;
 import com.developer.smmmousavi.balefilm.helper.RecyclerViewHelper;
 import com.developer.smmmousavi.balefilm.model.Genre;
@@ -31,30 +29,14 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 
 public class HomeFragment extends BaseDaggerFragment implements OnRvItemClickListener {
 
-    @BindView(R.id.prgMainLoading)
-    ProgressBar mPrgMainLoading;
-    @BindView(R.id.prgFooterLoading)
-    ProgressBar mPrgFooterLoading;
-    @BindView(R.id.swpRefresh)
-    SwipeRefreshLayout mRefreshLayout;
-    @BindView(R.id.mainMoviesRv)
-    RecyclerView mMainMovieRv;
-    @BindView(R.id.sprGenre)
-    Spinner mGenresSpinner;
-    @BindView(R.id.sprSortBy)
-    Spinner mSortBySpinner;
-    @BindView(R.id.sprYear)
-    Spinner mYearSpinner;
 
     public static final String TAG = "HomeFragmentTag";
 
+    private FragmentHomeBinding mViewBinding;
     private HomeFragmentViewModel mViewModel;
     private MainMoviesRvAdapter<Movie> mMainMoviesRvAdapter;
     private List<Movie> mMovieList;
@@ -92,8 +74,8 @@ public class HomeFragment extends BaseDaggerFragment implements OnRvItemClickLis
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_home, container, false);
-        ButterKnife.bind(this, v);
+        mViewBinding = FragmentHomeBinding.inflate(getLayoutInflater());
+        View v = mViewBinding.getRoot();
 
         setListeners();
 
@@ -129,8 +111,8 @@ public class HomeFragment extends BaseDaggerFragment implements OnRvItemClickLis
             //onChange()
             if (!mChange) {
                 Log.d(TAG, "subscribeRvObserver:  Rv onchange!");
-                if (mRefreshLayout.isRefreshing())
-                    mRefreshLayout.setRefreshing(false);
+                if (mViewBinding.swpRefreshLayout.isRefreshing())
+                    mViewBinding.swpRefreshLayout.setRefreshing(false);
                 setRvAdapterList(mMovieList);
                 mDidScroll = false;
                 mChange = true;
@@ -146,24 +128,24 @@ public class HomeFragment extends BaseDaggerFragment implements OnRvItemClickLis
         for (int i = 2020; i > 1989; i--)
             years.add(i);
         ArrayAdapter<Genre> genreAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, genres);
-        mGenresSpinner.setAdapter(genreAdapter);
+        mViewBinding.sprGenre.setAdapter(genreAdapter);
         ArrayAdapter<Sort> sortAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, Sort.getSortList());
-        mSortBySpinner.setAdapter(sortAdapter);
+        mViewBinding.sprSortBy.setAdapter(sortAdapter);
         ArrayAdapter<Integer> yearAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, years);
-        mYearSpinner.setAdapter(yearAdapter);
+        mViewBinding.sprYear.setAdapter(yearAdapter);
     }
 
     private void initValues() {
-        mGenre = (Genre) mGenresSpinner.getItemAtPosition(0);
-        mSortBy = (Sort) mSortBySpinner.getItemAtPosition(0);
-        mYear = (Integer) mYearSpinner.getItemAtPosition(0);
+        mGenre = (Genre) mViewBinding.sprGenre.getItemAtPosition(0);
+        mSortBy = (Sort) mViewBinding.sprSortBy.getItemAtPosition(0);
+        mYear = (Integer) mViewBinding.sprYear.getItemAtPosition(0);
         mPage = 1;
     }
 
     private void initMainMoviesRv() {
         mMainMoviesRvAdapter = new MainMoviesRvAdapter<>(this);
         LinearLayoutManager layoutManager = mRvHelper.getGridLayoutManager(getContext(), RecyclerViewHelper.Orientation.VERTICAL, 3);
-        mRvHelper.buildRecyclerView(layoutManager, mMainMovieRv, mMainMoviesRvAdapter);
+        mRvHelper.buildRecyclerView(layoutManager, mViewBinding.mainMoviesRv, mMainMoviesRvAdapter);
     }
 
     private void setRvAdapterList(List<Movie> movieList) {
@@ -171,16 +153,17 @@ public class HomeFragment extends BaseDaggerFragment implements OnRvItemClickLis
     }
 
     private void setListeners() {
-        mRefreshLayout.setOnRefreshListener(() -> {
+
+        mViewBinding.swpRefreshLayout.setOnRefreshListener(() -> {
             resetRv();
             subscribeRvObserver();
         });
 
-        mGenresSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        mViewBinding.sprGenre.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> arg0, View arg1,
                                        int arg2, long arg3) {
-                mGenre = (Genre) mGenresSpinner.getSelectedItem();
+                mGenre = (Genre) mViewBinding.sprGenre.getSelectedItem();
                 resetRv();
                 subscribeRvObserver();
             }
@@ -190,11 +173,11 @@ public class HomeFragment extends BaseDaggerFragment implements OnRvItemClickLis
             }
         });
 
-        mSortBySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        mViewBinding.sprSortBy.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> arg0, View arg1,
                                        int arg2, long arg3) {
-                mSortBy = (Sort) mSortBySpinner.getSelectedItem();
+                mSortBy = (Sort) mViewBinding.sprSortBy.getSelectedItem();
                 resetRv();
                 subscribeRvObserver();
             }
@@ -204,11 +187,11 @@ public class HomeFragment extends BaseDaggerFragment implements OnRvItemClickLis
             }
         });
 
-        mYearSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        mViewBinding.sprYear.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> arg0, View arg1,
                                        int arg2, long arg3) {
-                mYear = (int) mYearSpinner.getSelectedItem();
+                mYear = (int) mViewBinding.sprYear.getSelectedItem();
                 resetRv();
                 subscribeRvObserver();
             }
@@ -217,10 +200,10 @@ public class HomeFragment extends BaseDaggerFragment implements OnRvItemClickLis
             public void onNothingSelected(AdapterView<?> arg0) {
             }
         });
-        mMainMovieRv.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        mViewBinding.mainMoviesRv.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                if (!mMainMovieRv.canScrollVertically(1) && !mDidScroll) {
+                if (!mViewBinding.mainMoviesRv.canScrollVertically(1) && !mDidScroll) {
                     mDidScroll = true;
                     mPage++;
                     subscribeRvObserver();
@@ -239,20 +222,20 @@ public class HomeFragment extends BaseDaggerFragment implements OnRvItemClickLis
 
     private void showFooterLoading(boolean show) {
         if (show)
-            mPrgFooterLoading.setVisibility(View.VISIBLE);
+            mViewBinding.prgFooterLoading.setVisibility(View.VISIBLE);
         else
-            mPrgFooterLoading.setVisibility(View.GONE);
+            mViewBinding.prgFooterLoading.setVisibility(View.GONE);
     }
 
     private void showMainLoading(boolean show) {
         if (show)
-            mPrgMainLoading.setVisibility(View.VISIBLE);
+            mViewBinding.prgMainLoading.setVisibility(View.VISIBLE);
         else
-            mPrgMainLoading.setVisibility(View.GONE);
+            mViewBinding.prgMainLoading.setVisibility(View.GONE);
     }
 
     public void smoothScrollTop() {
-        mMainMovieRv.smoothScrollToPosition(0);
+        mViewBinding.mainMoviesRv.scrollToPosition(0);
     }
 
     @Override

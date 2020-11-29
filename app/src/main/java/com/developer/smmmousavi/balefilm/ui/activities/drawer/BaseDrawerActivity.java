@@ -9,30 +9,24 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.developer.smmmousavi.balefilm.R;
+import com.developer.smmmousavi.balefilm.databinding.ActivityBaseDrawerBinding;
 import com.developer.smmmousavi.balefilm.ui.activities.base.BaseDaggerCompatActivity;
 import com.developer.smmmousavi.balefilm.ui.adapter.MainMoviesPagerAdapter;
 import com.developer.smmmousavi.balefilm.ui.fragments.base.BaseDaggerFragment;
 import com.developer.smmmousavi.balefilm.ui.fragments.home.HomeFragment;
 import com.developer.smmmousavi.balefilm.ui.fragments.search.SearchFragment;
 import com.developer.smmmousavi.balefilm.util.KeyboardUtils;
-import com.google.android.material.appbar.AppBarLayout;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.AppCompatImageView;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 public abstract class BaseDrawerActivity extends BaseDaggerCompatActivity
     implements NavigationView.OnNavigationItemSelectedListener, OnBackPressedListener, SetOnContentFragmentInsert, SetOnToolbarVisibility {
@@ -40,26 +34,14 @@ public abstract class BaseDrawerActivity extends BaseDaggerCompatActivity
     private static final String TAG = "BaseDrawerActivity";
 
 
-    @BindView(R.id.imgNavbarButton)
-    AppCompatImageView imgNavbarButton;
-    @BindView(R.id.navbarView)
-    NavigationView mNavigationView;
-    @BindView(R.id.dlMainFragmentDrawer)
-    DrawerLayout mDrawerLayout;
-    @BindView(R.id.mainToolbar)
-    AppBarLayout mToolbarLayout;
-    @BindView(R.id.bottomNavView)
-    BottomNavigationView mBottomNavigationView;
-    @BindView(R.id.mainViewPager)
-    ViewPager mViewPager;
-
+    private ActivityBaseDrawerBinding mViewBinding;
     private OnBackPressedListener mOnBackPressedListener;
     private BaseDaggerFragment mHostedFragment;
     private boolean mIsToolbarVisible;
     private List<BaseDaggerFragment> mFragmentList;
 
     public NavigationView getNavigationView() {
-        return mNavigationView;
+        return mViewBinding.navbarView;
     }
 
     public void setOnBackPressedListener(OnBackPressedListener listener) {
@@ -75,8 +57,11 @@ public abstract class BaseDrawerActivity extends BaseDaggerCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_base_drawer);
-        ButterKnife.bind(this);
+        mViewBinding = ActivityBaseDrawerBinding.inflate(getLayoutInflater());
+        View view = mViewBinding.getRoot();
+        setContentView(view);
+
+        setViewListeners();
 
         setStateBarColor();
 
@@ -91,6 +76,10 @@ public abstract class BaseDrawerActivity extends BaseDaggerCompatActivity
         initViewPager();
     }
 
+    protected void setViewListeners() {
+        mViewBinding.mainToolbar.imgNavbarButton.setOnClickListener(V -> mViewBinding.dlMainFragmentDrawer.openDrawer(GravityCompat.START));
+        setOnBackPressedListener(this);
+    }
 
     private void setStateBarColor() {
         if (Build.VERSION.SDK_INT >= 21) {
@@ -111,16 +100,16 @@ public abstract class BaseDrawerActivity extends BaseDaggerCompatActivity
     private void showToolbar(boolean show) {
         if (!show) {
             mIsToolbarVisible = false;
-            mToolbarLayout.setVisibility(View.GONE);
+            mViewBinding.mainToolbar.getRoot().setVisibility(View.GONE);
         } else {
             mIsToolbarVisible = true;
-            mToolbarLayout.setVisibility(View.VISIBLE);
+            mViewBinding.mainToolbar.getRoot().setVisibility(View.VISIBLE);
         }
     }
 
     private void initNavView() {
-        mNavigationView.setNavigationItemSelectedListener(this);
-        mNavigationView.getMenu()
+        mViewBinding.navbarView.setNavigationItemSelectedListener(this);
+        mViewBinding.navbarView.getMenu()
             .getItem(0)
             .setChecked(true);
     }
@@ -129,9 +118,9 @@ public abstract class BaseDrawerActivity extends BaseDaggerCompatActivity
         MainMoviesPagerAdapter adapter = new MainMoviesPagerAdapter(getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
         setFragmentList();
         adapter.setFragments(mFragmentList);
-        mViewPager.setAdapter(adapter);
-        mViewPager.setOffscreenPageLimit(3);
-        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        mViewBinding.mainViewPager.setAdapter(adapter);
+        mViewBinding.mainViewPager.setOffscreenPageLimit(3);
+        mViewBinding.mainViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
             }
@@ -140,10 +129,10 @@ public abstract class BaseDrawerActivity extends BaseDaggerCompatActivity
             public void onPageSelected(int position) {
                 switch (position) {
                     case 0:
-                        mBottomNavigationView.getMenu().findItem(R.id.navbarHome).setChecked(true);
+                        mViewBinding.bottomNavView.getMenu().findItem(R.id.navbarHome).setChecked(true);
                         break;
                     case 1:
-                        mBottomNavigationView.getMenu().findItem(R.id.navbarSearch).setChecked(true);
+                        mViewBinding.bottomNavView.getMenu().findItem(R.id.navbarSearch).setChecked(true);
                         break;
                 }
             }
@@ -161,13 +150,13 @@ public abstract class BaseDrawerActivity extends BaseDaggerCompatActivity
     }
 
     private void initButtonNavView() {
-        mBottomNavigationView.setOnNavigationItemSelectedListener(item -> {
+        mViewBinding.bottomNavView.setOnNavigationItemSelectedListener(item -> {
             switch (item.getItemId()) {
                 case R.id.navbarHome:
                     if (!(mHostedFragment instanceof HomeFragment)) {
                         KeyboardUtils.hideKeyboard(this);
                         mHostedFragment = HomeFragment.newInstance();
-                        mViewPager.setCurrentItem(0);
+                        mViewBinding.mainViewPager.setCurrentItem(0);
                         /*replaceFragment(R.id.flDrawerContentFragmentContainer,
                             mHostedFragment,
                             HomeFragment.TAG,
@@ -181,7 +170,7 @@ public abstract class BaseDrawerActivity extends BaseDaggerCompatActivity
                     break;
                 case R.id.navbarSearch:
                     if (!(mHostedFragment instanceof SearchFragment)) {
-                        mViewPager.setCurrentItem(1);
+                        mViewBinding.mainViewPager.setCurrentItem(1);
                         mHostedFragment = SearchFragment.newInstance();
                         if (mHostedFragment instanceof HomeFragment) {
                             /*replaceFragment(R.id.flDrawerContentFragmentContainer,
@@ -245,18 +234,18 @@ public abstract class BaseDrawerActivity extends BaseDaggerCompatActivity
     }
 
     public void closeDrawer() {
-        mDrawerLayout.closeDrawer(GravityCompat.START);
+        mViewBinding.dlMainFragmentDrawer.closeDrawer(GravityCompat.START);
     }
 
     public boolean isDrawerOpen() {
-        return mDrawerLayout.isDrawerOpen(GravityCompat.END);
+        return mViewBinding.dlMainFragmentDrawer.isDrawerOpen(GravityCompat.END);
     }
 
     public void uncheckNavBar() {
-        int itemCount = mNavigationView.getMenu().size();
+        int itemCount = mViewBinding.navbarView.getMenu().size();
         for (int i = 0; i < itemCount; i++) {
-            if (mNavigationView.getMenu().getItem(i).isChecked()) {
-                mNavigationView.getMenu().getItem(i).setChecked(false);
+            if (mViewBinding.navbarView.getMenu().getItem(i).isChecked()) {
+                mViewBinding.navbarView.getMenu().getItem(i).setChecked(false);
             }
         }
     }
@@ -276,20 +265,10 @@ public abstract class BaseDrawerActivity extends BaseDaggerCompatActivity
         }*/
     }
 
-
-    @OnClick(R.id.imgNavbarButton)
-    void setNavBarListener() {
-//        HomeFragment homeDrawerFragment = (HomeFragment) mFm.findFragmentByTag(HomeFragment.TAG);
-//        if (homeDrawerFragment != null)
-        mDrawerLayout.openDrawer(GravityCompat.START);
-        setOnBackPressedListener(this);
-    }
-
-
     @Override
     public void onBackPressed() {
-        if (mDrawerLayout.isDrawerOpen(mNavigationView))
-            mDrawerLayout.closeDrawer(GravityCompat.START);
+        if (mViewBinding.dlMainFragmentDrawer.isDrawerOpen(mViewBinding.navbarView))
+            mViewBinding.dlMainFragmentDrawer.closeDrawer(GravityCompat.START);
         else {
             FragmentManager fm = getSupportFragmentManager();
             for (int i = 0; i < fm.getBackStackEntryCount(); ++i)

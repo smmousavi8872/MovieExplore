@@ -1,12 +1,12 @@
 package com.developer.smmmousavi.balefilm.ui.adapter;
 
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
-import com.developer.smmmousavi.balefilm.R;
+import com.developer.smmmousavi.balefilm.base.BaseViewHolder;
 import com.developer.smmmousavi.balefilm.base.recyclerview.BaseRvAdapter;
 import com.developer.smmmousavi.balefilm.base.recyclerview.OnRvItemClickListener;
+import com.developer.smmmousavi.balefilm.databinding.RowMainMovieBinding;
 import com.developer.smmmousavi.balefilm.model.Movie;
 import com.developer.smmmousavi.balefilm.ui.viewholder.MainMoviesVH;
 
@@ -21,20 +21,19 @@ public class MainMoviesRvAdapter<T extends Movie> extends BaseRvAdapter<T> {
     }
 
     @Override
-    protected RecyclerView.ViewHolder createHeaderViewHolder(ViewGroup parent) {
+    protected BaseViewHolder<T> createHeaderViewHolder(ViewGroup parent) {
         return null;
     }
 
     @Override
-    protected RecyclerView.ViewHolder createItemViewHolder(ViewGroup parent, OnRvItemClickListener listener) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_main_movie, parent, false);
-        return new MainMoviesVH<T>(v, mRvItemClickListener);
+    protected BaseViewHolder<T> createItemViewHolder(ViewGroup parent, OnRvItemClickListener listener) {
+        RowMainMovieBinding viewBinding = RowMainMovieBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+        return new MainMoviesVH<T>(viewBinding, mRvItemClickListener);
     }
 
 
-
     @Override
-    protected RecyclerView.ViewHolder createFooterViewHolder(ViewGroup parent) {
+    protected BaseViewHolder<T> createFooterViewHolder(ViewGroup parent) {
         return null;
     }
 

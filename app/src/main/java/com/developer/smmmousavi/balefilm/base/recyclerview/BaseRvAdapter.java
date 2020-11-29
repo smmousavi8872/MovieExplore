@@ -2,13 +2,16 @@ package com.developer.smmmousavi.balefilm.base.recyclerview;
 
 import android.view.ViewGroup;
 
+import com.developer.smmmousavi.balefilm.base.BaseViewHolder;
+import com.developer.smmmousavi.balefilm.model.BaseModel;
+
 import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 
-public abstract class BaseRvAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public abstract class BaseRvAdapter<T extends BaseModel> extends RecyclerView.Adapter<BaseViewHolder<T>> {
 
     protected static final int HEADER = 0;
     protected static final int ITEM = 1;
@@ -18,11 +21,11 @@ public abstract class BaseRvAdapter<T> extends RecyclerView.Adapter<RecyclerView
     protected OnRvItemClickListener mOnItemClickListener;
     protected boolean mIsFooterAdded = false;
 
-    protected abstract RecyclerView.ViewHolder createHeaderViewHolder(ViewGroup parent);
+    protected abstract BaseViewHolder<T> createHeaderViewHolder(ViewGroup parent);
 
-    protected abstract RecyclerView.ViewHolder createItemViewHolder(ViewGroup parent, OnRvItemClickListener listener);
+    protected abstract BaseViewHolder<T> createItemViewHolder(ViewGroup parent, OnRvItemClickListener listener);
 
-    protected abstract RecyclerView.ViewHolder createFooterViewHolder(ViewGroup parent);
+    protected abstract BaseViewHolder<T> createFooterViewHolder(ViewGroup parent);
 
     protected abstract void bindHeaderViewHolder(RecyclerView.ViewHolder viewHolder);
 
@@ -61,8 +64,8 @@ public abstract class BaseRvAdapter<T> extends RecyclerView.Adapter<RecyclerView
 
     @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        RecyclerView.ViewHolder viewHolder;
+    public BaseViewHolder<T> onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        BaseViewHolder<T> viewHolder;
 
         switch (viewType) {
             case HEADER:
@@ -81,7 +84,7 @@ public abstract class BaseRvAdapter<T> extends RecyclerView.Adapter<RecyclerView
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
+    public void onBindViewHolder( BaseViewHolder<T> viewHolder, int position) {
         switch (getItemViewType(position)) {
             case HEADER:
                 bindHeaderViewHolder(viewHolder);

@@ -9,10 +9,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 
-import com.developer.smmmousavi.balefilm.R;
 import com.developer.smmmousavi.balefilm.base.recyclerview.OnRvItemClickListener;
+import com.developer.smmmousavi.balefilm.databinding.FragmentSearchBinding;
 import com.developer.smmmousavi.balefilm.factory.viewmodel.ViewModelProviderFactory;
 import com.developer.smmmousavi.balefilm.helper.RecyclerViewHelper;
 import com.developer.smmmousavi.balefilm.model.Movie;
@@ -25,26 +24,15 @@ import java.util.List;
 import javax.inject.Inject;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.AppCompatEditText;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 public class SearchFragment extends BaseDaggerFragment implements OnRvItemClickListener {
 
     public static final String TAG = "SearchFragmentTag";
 
-    @BindView(R.id.prgFooterLoading)
-    ProgressBar mPrgFooterLoading;
-    @BindView(R.id.prgLoadingSearch)
-    ProgressBar mPrgSearchLoading;
-    @BindView(R.id.edtSearchMovie)
-    AppCompatEditText mEdtSearchMovie;
-    @BindView(R.id.searchMoviesRv)
-    RecyclerView mSearchMovieRv;
-
+    private FragmentSearchBinding mViewBinding;
     private SearchFragmentViewModel mViewModel;
     private SearchMoviesRvAdapter<Movie> mSearchMoviesRvAdapter;
     private List<Movie> mMovieList;
@@ -78,8 +66,8 @@ public class SearchFragment extends BaseDaggerFragment implements OnRvItemClickL
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_search, container, false);
-        ButterKnife.bind(this, v);
+        mViewBinding = FragmentSearchBinding.inflate(getLayoutInflater());
+        View  v = mViewBinding.getRoot();
 
         setViewListeners();
 
@@ -118,7 +106,7 @@ public class SearchFragment extends BaseDaggerFragment implements OnRvItemClickL
         mSearchMoviesRvAdapter = new SearchMoviesRvAdapter<>(this);
         LinearLayoutManager layoutManager = mRvHelper.getLinearLayoutManager(getContext(),
             RecyclerViewHelper.Orientation.VERTICAL, false);
-        mRvHelper.buildRecyclerView(layoutManager, mSearchMovieRv, mSearchMoviesRvAdapter);
+        mRvHelper.buildRecyclerView(layoutManager, mViewBinding.searchMoviesRv, mSearchMoviesRvAdapter);
     }
 
     private void setRvAdapterList(List<Movie> movies) {
@@ -126,7 +114,7 @@ public class SearchFragment extends BaseDaggerFragment implements OnRvItemClickL
     }
 
     private void setViewListeners() {
-        mEdtSearchMovie.addTextChangedListener(new TextWatcher() {
+        mViewBinding.edtSearchMovie.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
@@ -155,10 +143,10 @@ public class SearchFragment extends BaseDaggerFragment implements OnRvItemClickL
             }
         });
 
-        mSearchMovieRv.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        mViewBinding.searchMoviesRv.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                if (!mSearchMovieRv.canScrollVertically(1) && !mDidScroll) {
+                if (!mViewBinding.searchMoviesRv.canScrollVertically(1) && !mDidScroll) {
                     mDidScroll = true;
                     mPage++;
                     showFooterLoading(true);
@@ -179,21 +167,21 @@ public class SearchFragment extends BaseDaggerFragment implements OnRvItemClickL
     }
 
     public void smoothScrollTop() {
-        mSearchMovieRv.smoothScrollToPosition(0);
+        mViewBinding.searchMoviesRv.smoothScrollToPosition(0);
     }
 
     private void showSearchLoading(boolean show) {
         if (show)
-            mPrgSearchLoading.setVisibility(View.VISIBLE);
+            mViewBinding.prgLoadingSearch.setVisibility(View.VISIBLE);
         else
-            mPrgSearchLoading.setVisibility(View.GONE);
+            mViewBinding.prgLoadingSearch.setVisibility(View.GONE);
     }
 
     private void showFooterLoading(boolean show) {
         if (show)
-            mPrgFooterLoading.setVisibility(View.VISIBLE);
+            mViewBinding.prgFooterLoading.setVisibility(View.VISIBLE);
         else
-            mPrgFooterLoading.setVisibility(View.GONE);
+            mViewBinding.prgFooterLoading.setVisibility(View.GONE);
     }
 
     @Override
